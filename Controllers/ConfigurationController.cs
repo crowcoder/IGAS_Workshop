@@ -20,9 +20,9 @@ namespace IGAS.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] {
-            "Test - Hello World!"
-         };
+          return new string[] {
+           $"Testing, Hello World!"
+          };
         }
     }
 }

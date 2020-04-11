@@ -6,10 +6,10 @@
 * An Azure account. [The free trial](https://azure.microsoft.com/en-us/free/) is more than sufficient for this course.
 * Setup an Azure DevOps project. Use [the quickstart guide](https://docs.microsoft.com/en-us/azure/devops/user-guide/sign-up-invite-teammates?view=azure-devops) to create your account and setup a "Project". You will not need to invite team members or configure invitations.
 * Azure CLI access. You can [install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) locally, or if you prefer, you can perform all Azure CLI operations from the [Azure Cloud Shell](https://shell.azure.com) which runs entirely in the browser. 
-* [Powershell or Powershell Core](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.0.0) (which has its own requirements). Once you have this installed, you can execute Powershell commands right from this notebook.
+* [Powershell or Powershell Core](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.0.0) (which has its own requirements). Once you have this installed, you can execute Powershell commands right from your choice of environments, including VS Code.
 * A Github account, or if you are comfortable doing your own thing, any Azure-supported repository will work. This workshop will use Github as the source code reposity so you will be on your own if you choose to use something else.
-* Get the application we will be working with and make sure it runs. Exercise #1 provides an overview of the sample application. For now, just acquire it and test it.
- * Clone the repository (https://github.com/crowcoder/IHaveASecret.git)
+* Get the application we will be working with and make sure it runs. [Exercise #1](.\exercise_1.md) provides an overview of the sample application. For now, just acquire it and test it.
+ * Clone the repository (https://github.com/crowcoder/IGAS_Workshop.git)
  * Run with debugging in VS Code. Tip, use the debug charm: ![debug charm](.\img\debug.png) (ctrl+shift+d on windows)
  * Use your favorite HTTP client (Browser, Postman, Fiddler, Powershell) and navigate to https://localhost:5001/Configuration. You should receive the folowing  JSON:
   * `["Test -  Hello World!"]`
