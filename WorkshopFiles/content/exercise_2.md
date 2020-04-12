@@ -1,4 +1,4 @@
-# Exercise #2, Push to Azure App Service (30 min.)
+# Exercise #2, Get it into DevOps (30 min.)
 Now that you have completed development of the API, it is time to #RubDevOpsOnIt.
 Make sure you have completed the prerequisites so you have an Azure DevOps organization ready to go, log into your DevOps account, then:
 
@@ -10,9 +10,39 @@ Make sure you have completed the prerequisites so you have an Azure DevOps organ
 1. Choose "Import a repository option".
 1. For the clone URL, enter https://github.com/crowcoder/IGAS_Workshop.git
 1. When the import is complete you will see your new repository. This repo is a copy of the GitHub repo, the two are not linked. Changes to one will not affect changes to the other.
+1. Change to the Prod branch.
 
  | Step 1 | Step 2 | Step 3 | 
  | --- | --- | --- |
  | ![Step 1](./img/project_setup_1.png) | ![Step 2](./img/project_setup_2.png) | ![Step 3](./img/project_setup_3.png) |
- | **Step 4** | **Step 5** | | 
- | ![Step 4](./img/project_setup_4.png) | ![Step 5](./img/project_setup_5.png) | |
+ | **Step 4** | **Step 5** | **Step 6**| 
+ | ![Step 4](./img/project_setup_4.png) | ![Step 5](./img/project_setup_5.png) | ![Step 6](./img/project_setup_6.png) |
+
+## Prod branch differences
+ In just a moment you will create a Build of the project in Azure DevOps. But first, let's go over what I have changed between what you have done so far on the master branch and Prod branch which we will be working with from here on out. You can view the files in the DevOps user interface or in your IDE by changing to the Prod branch.
+
+ #### Changes to Program.cs
+In the setup of the Environment Variable configuration provider I have included a prefix argument of "IGAS_". This means that only environment variables that begin with "IGAS_" will be pulled into configuration. Note that the prefix itself will be removed. If you have an environment variable named "IGAS_Password" then your C# code will need to look for just "Password".
+```
+ config.AddEnvironmentVariables(prefix: "IGAS_");
+ ```
+ #### Changes to ConfigurationController.cs
+The `Get()` method has been modified to return all configuration settings instead of writing a line of code for each one (e.g. `_config.GetValue<string>("..setting..")`). This will allow us to focus on how and where to set configuration without needing to make a bunch of code edits. It also facilitates experimentation because any changes you make, regardless of the technique, will echo back from your API call.
+ ```
+var AllConfigSettings = _config.AsEnumerable()
+    .Select(c => new { ConfigKey = c.Key, ConfigValue = c.Value});
+
+return AllConfigSettings;
+```
+#### Changes to appsettings.json
+The appsettings file has been modified to include a few fictitious settings. The values are formatted as "\_\_*value*\_\_". The double underscores are meant to make the value a "token" that can be replaced during deployment.
+```
+{
+    "ConnectionString" : "__ConnectionString__",
+    "StockQuoteAPIURL" : "__StockQuoteAPIURL__",
+    "Password" : "__Password__"
+}
+```
+ ## Setup a Build
+ We don't have a lot of work to do in the Build pipeline. There are no configuration steps included here (though you could), we just need to have a published project to deploy in the Release pipeline. It is in the Release Pipeline that we will manage configuration.
+ > [More information on Build pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops#package-and-deliver-your-code)
