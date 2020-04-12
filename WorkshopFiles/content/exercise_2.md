@@ -46,3 +46,19 @@ The appsettings file has been modified to include a few fictitious settings. The
  ## Setup a Build
  We don't have a lot of work to do in the Build pipeline. There are no configuration steps included here (though you could), we just need to have a published project to deploy in the Release pipeline. It is in the Release Pipeline that we will manage configuration.
  > [More information on Build pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops#package-and-deliver-your-code)
+
+1. Click on the Rocket Ship icon to open Pipelines and then click "Create Pipeline"
+1. Choose Azure Repos Git YAML
+1. Select the IGAS Git code repository
+1. Select Existing Azure Pipelines YAML file. 
+1. Select the "prod" branch and "azure-pipelines.yml" file.
+1. Click run to build the project and produce an artifact that will be deployed later in a Release pipeline.
+1. Review the successful deployment.
+
+  | Step 1 | Step 2 | Step 3 | 
+ | --- | --- | --- |
+ | ![Step 1](./img/build_1.png) | ![Step 2](./img/build_2.png) | ![Step 3](./img/build_3.png) |
+ | **Step 4** | **Step 5** | **Step 6**| 
+ | ![Step 4](./img/build_4.png) | ![Step 5](./img/build_5.png) | ![Step 6](./img/build_6.png) |
+  | **Step 7** |  | | 
+ | ![Step 4](./img/build_7.png) | | |
