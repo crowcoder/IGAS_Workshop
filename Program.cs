@@ -51,7 +51,9 @@ namespace IGAS
                     }
                 }
 
-                config.AddEnvironmentVariables();
+                // To avoid noise in the response, filter environment variables to
+                // only include the ones prefixed with IGAS_
+                config.AddEnvironmentVariables(prefix: "IGAS_");
 
                 if (args != null)
                 {

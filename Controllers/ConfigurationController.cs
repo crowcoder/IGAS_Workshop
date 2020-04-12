@@ -18,11 +18,18 @@ namespace IGAS.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<object> Get()
         {
-          return new string[] {
-           $"Testing, Hello World!"
-          };
+            // For simplicity and to encourage experimentation, this code will retrieve
+            // all configuration settings in the system, except for environment variables,
+            // which will only be pulled in if prefixed with "IGAS_" because of how the
+            // environment variable configuration provider is set up in program.cs. The
+            // prefix will be stripped, so you will not see "IGAS_" in your setting name.
+            
+            var AllConfigSettings = _config.AsEnumerable()
+            .Select(c => new { ConfigKey = c.Key, ConfigValue = c.Value});
+
+            return AllConfigSettings;
         }
     }
 }
