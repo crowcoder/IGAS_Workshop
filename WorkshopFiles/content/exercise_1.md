@@ -1,6 +1,6 @@
-# Exercise #1, Exploring the sample application (15 min.)
+# Exercise #1, Exploring the sample application (30 min.)
 
-The IGAS (I've Got a Secret) application is a ASP.NET API. There are no web pages, just a single endpoint that returns JSON. The code and structure of the application is kept as simple as possible to concentrate on how to use configuration settings as opposed to how to create an API in .NET Core. The JSON payload is simply going to reflect configuration values so we can observe the behavior as we edit the application.
+The IGAS (I've Got a Secret) application is a ASP.NET API. There are no web pages, just a single endpoint that returns JSON. The code and structure of the application is kept as simple as possible to concentrate on how to use configuration settings as opposed to how to create an API in .NET Core. The JSON payload is simply going to echo configuration values so we can observe the behavior as we edit the application.
 
 If you are familiar with the `dotnet` cli, you might notice the source code differs from what you get when you create a new application: `dotnet new webapi`. The difference is intentional - some of what is normally abstracted has been explicitly written for educational purposes and is the reason the term "Manually" appears in the method name.
 
@@ -18,19 +18,12 @@ The entire file should look like this when you are done:
 
 ```
     {
-      "Logging": {
-        "LogLevel": {
-          "Default": "Information",
-          "Microsoft": "Warning",
-          "Microsoft.Hosting.Lifetime": "Information"
-        }
-      },
       "FromAppSettings" :"I came from appsettings."
     }
 ```
 Next, edit the controller to return this configuration value.
-1. In the Controllers folder, open the file `ConfigurationController.cs`.
-2. Edit the `Get()` action to return the new configuration setting in adddition to the Test value:
+1. In the Controllers folder, open the file [ConfigurationController.cs](../../Controllers/ConfigurationController.cs).
+1. Edit the `Get()` action to return the new configuration setting in adddition to the Test value:
 
 ```
     [HttpGet]
