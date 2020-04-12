@@ -190,3 +190,5 @@ Your `Get()` method should look like this:
 Experiment with configuration by commenting out one or more of the providers that are added in `program.cs`. What happens when you do?
 
 Research and inject additional prodivers like the [Memory configuration provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#memory-configuration-provider), the [Key-per-file configuration provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#key-per-file-configuration-provider), the [Azure Keyvault configuration provider](https://docs.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?view=aspnetcore-3.1) and more.
+
+Continue to [Exercise 2](./exercise_2.md)
