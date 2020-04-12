@@ -62,3 +62,55 @@ The appsettings file has been modified to include a few fictitious settings. The
  | ![Step 4](./img/build_4.png) | ![Step 5](./img/build_5.png) | ![Step 6](./img/build_6.png) |
   | **Step 7** |  | | 
  | ![Step 4](./img/build_7.png) | | |
+
+  ## Create a Release
+  A "Release" is the process that deploys your application. It will pick up the artifact created by the Build pipeline and push it to an Azure App Service. Here we also have an opportunity to further configure the application by replacing setting values based on the environment or "stage". For instance, a Release pipeline may have, for example, 3 stages. Development, QA and Production. At each stage we can swap out values that are specific to that stage.
+
+  First things first though, we need an Azure App Service.
+
+  #### Create the App Service
+  An Azure App Service is a resource that hosts your web application. The App Service runs within an App Service Plan that provides the cpu, memory and other features. Later, we will experiment with Slots, which requires a paid version of the App Service Plan. So be sure to delete the resources you create when you are done with the workshop.
+
+> [The Powershell for Azure command reference](https://docs.microsoft.com/en-us/powershell/module/?view=azps-3.7.0)
+
+> [workshop.ps1 in the scripts folder has all the commands you will see here, in an easier to execute format](../scripts/workshop.ps1)
+
+You will execute the following Powershell commands to create a Resource Group, an Azure App Service Plan, and a Web App, **but edits are required.**
+1. [Optional] If your default subscription is not the one you want to use for this workshop, uncomment **line 10** and enter the Azure Subscription ID you want to use.
+1. [Optional] On **line 15** change the location to a region closest to you.
+1. On **line 24** enter a value to be used as a prefix to the web app name. This must be unique across Azure. Your site will be accessed at "https://~your prefix~-igas-01.azurewebsites.net". Feel free to completely change this name as desired.
+
+```
+# Authenticate to Azure
+Connect-AzAccount
+
+# List the subscriptions your account has access to
+Get-AzSubscription
+
+# You may have multiple subscriptions. If the one you want to use for this tutorial
+# is not your default subscription, you can do this to change what subscription
+# this script will operate against.
+# Set-AzContext -SubscriptionId "<enter your subscription id>"
+
+# Create resource group to hold all resources for the tutorial.
+# Change the region as appropriate for your location
+$groupName = "rg-igas-01"
+$location = "eastus"
+New-AzResourceGroup -Name $groupName -Location $location
+
+# Create an app service plan
+$plan = New-AzAppServicePlan -Location $location  -Name "asp-igas-01" -ResourceGroupName $groupName -Tier "S1"
+
+# Create the App Service to host the application
+# The name has to be unique across all of Azure because it is part of the public URL.
+# Set the prefix variable to something unique, either completely random or meaningful, doesn't matter.
+$prefix = "???"
+$app = New-AzWebApp -ResourceGroupName $groupName -Name "$prefix-igas-01" -Location $location -AppServicePlan $plan.Id
+
+# Browse to the URL of the new application to make sure the app service is up.
+$newurl = "https://$prefix-igas-01.azurewebsites.net"
+[System.Diagnostics.Process]::Start($newurl)
+```
+#### Create a Release Pipeline
+Now that you have a place to deploy your application, it is time to create a Release Pipeline.
+
