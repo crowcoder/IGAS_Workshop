@@ -12,7 +12,7 @@ Make sure you have completed the prerequisites so you have an Azure DevOps organ
 1. When the import is complete you will see your new repository. This repo is a copy of the GitHub repo, the two are not linked. Changes to one will not affect changes to the other.
 
  | Step 1 | Step 2 | Step 3 | 
- | --- | --- | --- 
- | ![Step 1](./img/project_setup_1.png) | ![Step 2](./img/project_setup_2.png) | ![Step 3](./img/project_setup_3.png)
+ | --- | --- | --- |
+ | ![Step 1](./img/project_setup_1.png) | ![Step 2](./img/project_setup_2.png) | ![Step 3](./img/project_setup_3.png) |
  | **Step 4** | **Step 5** | | 
- | ![Step 4](./img/project_setup_4.png) | ![Step 5](./img/project_setup_5.png) | 
+ | ![Step 4](./img/project_setup_4.png) | ![Step 5](./img/project_setup_5.png) | |
