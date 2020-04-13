@@ -1,13 +1,7 @@
-using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace IGAS
 {
@@ -15,7 +9,15 @@ namespace IGAS
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+            .ConfigureAppConfiguration(config =>
+            {
+                //Remove the default environment variable source and
+                //add it back with a filter so we limit what gets injested.
+                config.Sources.RemoveAt(4);
+                config.AddEnvironmentVariables("IGAS_");
+            })
+            .Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
