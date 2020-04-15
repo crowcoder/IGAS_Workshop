@@ -16,7 +16,7 @@ Let's begin exploring configuration by adding a setting to the JSON file in the 
 Open up `appsettings.Development.json` and add a new string entry: `"FromAppSettings" :"I came from appsettings."`
 The entire file should look like this when you are done:
 
-```
+```JSON
     {
       "FromAppSettings" :"I came from appsettings."
     }
@@ -25,7 +25,7 @@ Next, edit the controller to return this configuration value.
 1. In the Controllers folder, open the file [ConfigurationController.cs](../../Controllers/ConfigurationController.cs).
 1. Edit the `Get()` action to return the new configuration setting in adddition to the Test value:
 
-```
+```CSharp
     [HttpGet]
     public IEnumerable<string> Get()
     {
@@ -49,7 +49,7 @@ Let's dive a little deeper in the Configuration Providers. This material provide
 
 In the root of the project, there is `Program.cs`. If you think this file looks like a console application, that's because it is. .NET Core applications are console applications that happen to get hosted by something like Internet Information Services. The following code is executed at startup, we mostly just care about the numbered lines. Please note that this code is an edited version of the ASP .NET Core source code. The default project template abstracts this away but it is valuable for demonstration:
 
-```
+```CSharp
         public static IWebHostBuilder CreateDefaultBuilderManually(string[] args)
         {
             var builder = new WebHostBuilder();
@@ -135,7 +135,7 @@ We have also just learned the first example of providing configuration without s
 As a conscientious developer who is careful to keep configuration secrets out of source code, User Secrets is probably your best friend. User Secrets is a built-in way to store configuration in a file outside of your project. This file is stored in your profile folder and is as secure as anything under your profile. And being outside the project folder, there is no chance of adding to source control. It consists of a json file named `secrets.json`, within a folder typically named with a GUID to avoid collisions between applications. The options for enabling User Secrets varies by your IDE, lets do it with the `dotnet` cli so it works the same for everyone:
 
 1. Open the IGAS.csproj file to get a look at the contents before we make changes:
-```
+```XML
     <Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -148,7 +148,8 @@ As a conscientious developer who is careful to keep configuration secrets out of
 4. The output of the command will show the generated GUID.
 5. Go back and compare the .csproj file. Notice the addition of UserSecretsId:
 
-```<?xml version="1.0" encoding="utf-8"?>
+```XML
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -160,7 +161,7 @@ As a conscientious developer who is careful to keep configuration secrets out of
 6. Add a secret, again with the dotnet cli: `dotnet user-secrets set "MyUserSecret" "ABCXYZ"`
 7. In a text editor, inspect the json file that was created by the `set` command. On Windows go to %APDATA%\Microsoft\UserSecrets\<generated guid>\secrets.json . The contents of the file will be:
 
-```
+```JSON
     {
        MyUserSecret": "ABCXYZ"
     }
