@@ -34,8 +34,9 @@ $plan = New-AzAppServicePlan -Location $location  -Name "asp-igas-01" -ResourceG
 
 # Create the App Service to host the application
 # The name has to be unique across all of Azure because it is part of the public URL.
-# Set the prefix variable to something unique, either completely random or meaningful, doesn't matter.
-$prefix = "???"
+# This generates a random name.
+$prefix = [System.IO.Path]::GetFileNameWithoutExtension([System.IO.Path]::GetRandomFileName())
+Write-Debug $prefix
 $app = New-AzWebApp -ResourceGroupName $groupName -Name "$prefix-igas-01" -Location $location -AppServicePlan $plan.Id
 
 # Browse to the URL of the new application to make sure the app service is up.
