@@ -1,27 +1,35 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 
 namespace IGAS
 {
-        public class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args)
-            .ConfigureAppConfiguration(config =>
+            var builder = CreateHostBuilder(args);
+            AddPrefixToEnvVarConfigSrc(builder).Build().Run();
+        }
+
+        /// Locate the EnvironmentVariables configuration source in the Host Builder and
+        /// set a prefix so only prefixed environment variables will get injested.
+        internal static IHostBuilder AddPrefixToEnvVarConfigSrc(IHostBuilder builder)
+        {
+            return builder.ConfigureAppConfiguration(config =>
             {
-                //Remove the default environment variable source and
-                //add it back with a filter so we limit what gets injested.
-                config.Sources.RemoveAt(4);
-                config.AddEnvironmentVariables("IGAS_");
-            })
-            .Build().Run();
+                var envVarConfigSrc = config.Sources.Where(s =>
+                   s.GetType() == typeof(EnvironmentVariablesConfigurationSource))
+                   .Single();
+
+                ((EnvironmentVariablesConfigurationSource)envVarConfigSrc).Prefix = "IGAS_";
+            });
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+         Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
