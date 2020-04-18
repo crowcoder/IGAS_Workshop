@@ -66,6 +66,7 @@ namespace IGAS.Controllers
                         mdl.Source = "Command line args";
                         mdl.ConfigValues = GetProtectedData<CommandLineConfigurationProvider>(cli);
                         break;
+                    // Add more providers here if you did the extra credit!
                     default:
                         break;
                 }
