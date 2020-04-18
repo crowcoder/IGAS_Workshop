@@ -8,9 +8,12 @@
 $api = "https://localhost:5001/Configuration"
 Invoke-WebRequest -URI $api
 
-#####################
-## EXERCISE 2
-#####################
+## ███████╗██╗  ██╗███████╗██████╗  ██████╗██╗███████╗███████╗    ██████╗ 
+## ██╔════╝╚██╗██╔╝██╔════╝██╔══██╗██╔════╝██║██╔════╝██╔════╝    ╚════██╗
+## █████╗   ╚███╔╝ █████╗  ██████╔╝██║     ██║███████╗█████╗       █████╔╝
+## ██╔══╝   ██╔██╗ ██╔══╝  ██╔══██╗██║     ██║╚════██║██╔══╝      ██╔═══╝ 
+## ███████╗██╔╝ ██╗███████╗██║  ██║╚██████╗██║███████║███████╗    ███████╗
+## ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝╚══════╝╚══════╝    ╚══════╝
 
 # Authenticate to Azure
 Connect-AzAccount
@@ -42,3 +45,34 @@ $app = New-AzWebApp -ResourceGroupName $groupName -Name "$prefix-igas-01" -Locat
 # Browse to the URL of the new application to make sure the app service is up.
 $newurl = "https://$prefix-igas-01.azurewebsites.net"
 [System.Diagnostics.Process]::Start($newurl)
+
+
+##  ███████╗██╗  ██╗███████╗██████╗  ██████╗██╗███████╗███████╗    ██████╗ 
+##  ██╔════╝╚██╗██╔╝██╔════╝██╔══██╗██╔════╝██║██╔════╝██╔════╝    ╚════██╗
+##  █████╗   ╚███╔╝ █████╗  ██████╔╝██║     ██║███████╗█████╗       █████╔╝
+##  ██╔══╝   ██╔██╗ ██╔══╝  ██╔══██╗██║     ██║╚════██║██╔══╝       ╚═══██╗
+##  ███████╗██╔╝ ██╗███████╗██║  ██║╚██████╗██║███████║███████╗    ██████╔╝
+##  ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝╚══════╝╚══════╝    ╚═════╝                                                              
+
+# Be sure to connect to your Azure subscription first
+
+# Create a KeyVault
+
+    # Once again we need to make an Azure-unique name so we will randomize it.
+    $rndName = [System.IO.Path]::GetFileNameWithoutExtension([System.IO.Path]::GetRandomFileName())
+
+    $groupName = "rg-igas-01"
+    $location = "East US"
+    $kv = New-AzKeyVault -Name "kv-$rndName-igas-01" -ResourceGroupName $groupName -Location $location 
+
+    # Give yourself access to the keyvault
+    $context = Get-AzContext
+    $you = Get-AzADUser -UserPrincipalName "tekhed_2000_hotmail.com#EXT#@tekhed2000hotmail.onmicrosoft.com"
+    
+    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ServicePrincipalName $Context.Account.Id -PermissionsToSecrets get, list, set, delete, backup, restore, recover, purge
+    
+    # Add a secret
+    $passwordAsSecureString = ConvertTo-SecureString -String "P@ssw0rd1" -AsPlainText -Force
+    $secret = Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
+
+  

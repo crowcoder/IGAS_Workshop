@@ -134,7 +134,7 @@ Now that you have a place to deploy your application, it is time to create a Rel
 1. Click "Release-1" to go to the release instance you just created. As you create future releases they will become Release-2, Release-3, etc.
 1. The default release properties have it set to deploy automatically so you should see that it is running. You can configure it to only deploy manually if you prefer.
 1. When it is done you should see a Succeeded confirmation.
-1. Test the application to ensure it works. Make a GET request to the URL of your app service. Other than the random host name, it will be like this: https://aqixjv2y-igas-01.azurewebsites.net/Configuration
+1. Test the application to ensure it works. Make a GET request to the URL of your app service. Other than the random host name, it will be like this: https://aqixjv2y-igas-01.azurewebsites.net/Configuration/all . I have chosen to use Postman as my HTTP client. Notice there is not much configuration detail returned. Let's change that in [exercise 3](exercise_3.md).
 
 
   | Step 1 | Step 2 | Step 3 | 
@@ -146,5 +146,5 @@ Now that you have a place to deploy your application, it is time to create a Rel
  | ![Step 7](./img/release_7.png) | ![Step 8](./img/release_8.png) | ![Step 9](./img/release_9.png) |
  | **Step 10** | **Step 11** | **Step 12** | 
  | ![Step 10](./img/release_10.png) | ![Step 11](./img/release_11.png) | ![Step 12](./img/release_12.png) |
- | **Step 13** | **Step 14** |  | 
- | ![Step 13](./img/release_13.png) | ![Step 14](./img/release_14.png) | |
+ | **Step 13** | **Step 14** | **Step 15**  | 
+ | ![Step 13](./img/release_13.png) | ![Step 14](./img/release_14.png) | ![Step 14](./img/GetAll_AfterFirstDeploy.png) |
