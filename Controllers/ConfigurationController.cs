@@ -20,12 +20,20 @@ namespace IGAS.Controllers
             _config = config;
         }
 
+        [HttpGet]        
+        public IEnumerable<object> Get()
+        {
+            return _config.AsEnumerable()
+            .Select(c => new { ConfigKey = c.Key, ConfigValue = c.Value});
+        }
+
         /// The code in the controller IS NOT SOMETHING YOU WILL EVER NEED TO WRITE!
         /// This code is for demonstration purposes, you will almost certainly never
         /// have a scenario where you care which provider(s) are used. The convoluted-ness
         /// of the code is an indication of that.
         [HttpGet]
-        public IEnumerable<ProviderViewModel> Get()
+        [Route("all")]
+        public IEnumerable<ProviderViewModel> GetAll()
         {
             // For simplicity and to encourage experimentation, this code will retrieve
             // all configuration settings in the system, with the caveat of environment 
