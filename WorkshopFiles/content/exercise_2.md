@@ -52,8 +52,8 @@ The appsettings file has been modified to include a few fictitious settings. The
 1. Click on the Rocket Ship icon to open Pipelines and then click "Create Pipeline"
 1. Choose Azure Repos Git YAML
 1. Select the IGAS Git code repository
-1. Select Existing Azure Pipelines YAML file. 
-1. Select the "prod" branch and "azure-pipelines.yml" file.
+1. (this step may not be necessary, your .yml file may be chosen automatically) Select Existing Azure Pipelines YAML file. 
+1. (this step may not be necessary, your .yml file may be chosen automatically) Select the "prod" branch and "azure-pipelines.yml" file.
 1. Click run to build the project and produce an artifact that will be deployed later in a Release pipeline.
 1. Review the successful deployment.
 
