@@ -4,9 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.CommandLine;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
-using Microsoft.Extensions.Configuration.Json;
 
 namespace IGAS.Controllers
 {
@@ -20,11 +17,11 @@ namespace IGAS.Controllers
             _config = config;
         }
 
-        [HttpGet]        
+        [HttpGet]
         public IEnumerable<object> Get()
         {
             return _config.AsEnumerable()
-            .Select(c => new { ConfigKey = c.Key, ConfigValue = c.Value});
+            .Select(c => new { ConfigKey = c.Key, ConfigValue = c.Value });
         }
 
         /// The code in the controller IS NOT SOMETHING YOU WILL EVER NEED TO WRITE!
@@ -54,20 +51,13 @@ namespace IGAS.Controllers
                 {
                     case ChainedConfigurationProvider chained:
                         continue;
-                    case JsonConfigurationProvider j:
+                    case FileConfigurationProvider j:
                         mdl.Source = j.Source.Path;
-                        mdl.ConfigValues = GetProtectedData<JsonConfigurationProvider>(j);
+                        mdl.ConfigValues = GetProtectedData(j);
                         break;
-                    case EnvironmentVariablesConfigurationProvider e:
-                        mdl.Source = "Environment Variables";
-                        mdl.ConfigValues = GetProtectedData<EnvironmentVariablesConfigurationProvider>(e);
-                        break;
-                    case CommandLineConfigurationProvider cli:
-                        mdl.Source = "Command line args";
-                        mdl.ConfigValues = GetProtectedData<CommandLineConfigurationProvider>(cli);
-                        break;
-                    // Add more providers here if you did the extra credit!
                     default:
+                        mdl.Source = mdl.ProviderName;
+                        mdl.ConfigValues = GetProtectedData(provider);
                         break;
                 }
 
@@ -80,9 +70,9 @@ namespace IGAS.Controllers
         /// in. This is a protected property so dig it out with Reflection.
         /// IN CASE YOU ARE WONDERING, NO, THIS IS NOT HOW YOU SHOULD GET CONFIGURATION VALUES! This is
         /// just for demonstration.
-        private Dictionary<string, string> GetProtectedData<T>(Object instance)
+        private Dictionary<string, string> GetProtectedData(Object instance)
         {
-            PropertyInfo pInfo = typeof(T).GetProperty("Data", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo pInfo = instance.GetType().GetProperty("Data", BindingFlags.NonPublic | BindingFlags.Instance);
 
             if (pInfo != null)
             {
