@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace IGAS.Controllers
 {
@@ -12,9 +13,12 @@ namespace IGAS.Controllers
     public class ConfigurationController : ControllerBase
     {
         IConfiguration _config;
-        public ConfigurationController(IConfiguration config)
+        ILogger _logger;
+
+        public ConfigurationController(IConfiguration config, ILogger logger)
         {
             _config = config;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -47,21 +51,28 @@ namespace IGAS.Controllers
                 ProviderViewModel mdl = new ProviderViewModel();
                 mdl.ProviderName = provider.GetType().Name;
 
-                switch (provider)
+                try
                 {
-                    case ChainedConfigurationProvider chained:
-                        continue;
-                    case FileConfigurationProvider j:
-                        mdl.Source = j.Source.Path;
-                        mdl.ConfigValues = GetProtectedData(j);
-                        break;
-                    default:
-                        mdl.Source = mdl.ProviderName;
-                        mdl.ConfigValues = GetProtectedData(provider);
-                        break;
-                }
+                    switch (provider)
+                    {
+                        case ChainedConfigurationProvider chained:
+                            continue;
+                        case FileConfigurationProvider j:
+                            mdl.Source = j.Source.Path;
+                            mdl.ConfigValues = GetProtectedData(j);
+                            break;
+                        default:
+                            mdl.Source = mdl.ProviderName;
+                            mdl.ConfigValues = GetProtectedData(provider);
+                            break;
+                    }
 
-                providerViewModels.Add(mdl);
+                    providerViewModels.Add(mdl);
+                }
+                catch (System.Exception ex)
+                {
+                    _logger.LogError(ex, $"{mdl.ProviderName} does not work with this implmentation of the GetAll action.");
+                }
             }
             return providerViewModels;
         }
