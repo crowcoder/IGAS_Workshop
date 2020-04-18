@@ -13,12 +13,10 @@ namespace IGAS.Controllers
     public class ConfigurationController : ControllerBase
     {
         IConfiguration _config;
-        ILogger _logger;
 
-        public ConfigurationController(IConfiguration config, ILogger logger)
+        public ConfigurationController(IConfiguration config)
         {
             _config = config;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -71,7 +69,7 @@ namespace IGAS.Controllers
                 }
                 catch (System.Exception ex)
                 {
-                    _logger.LogError(ex, $"{mdl.ProviderName} does not work with this implmentation of the GetAll action.");
+                    // normally you log here but all we care about is not crashing 
                 }
             }
             return providerViewModels;
