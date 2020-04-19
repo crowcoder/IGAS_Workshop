@@ -149,6 +149,13 @@ To accomplish this, we will add a new Task to our Release pipeline that currentl
  | **Step 10** | **Step 11** | **Step 12** | 
 | ![Step 10](./img/add_kv_10.png) | ![Step 11](./img/add_kv_11.png) | ![Step 12](./img/add_kv_12.png) |
 
+#### DEV vs Production
+The work we have done in exercise #3 is interesting, but where pipeline variables really shine is when you have multiple stages; in our case, DEV and PROD. We will want DEV and PROD to have different connection strings because we don't want to test against production data. 
+
+So lets add a PROD stage to the Deployment and configure a different connection string.
+
+1. 
+
 #### Summary
 You have learned 3 techniques for supplying application configuration from within an Azure DevOps Release Pipeline. You used pipeline variables, variable groups and a KeyVault task. All three rely on the JSON variable substitution setting of the Deploy task to replace values in the chosen json file with variables obtained from the pipeline.
 
