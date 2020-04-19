@@ -161,4 +161,4 @@ You have learned 3 techniques for supplying application configuration from withi
 
 These are not your only options. Feel free to experiment with "Configuration Settings" within the Deploy task's "Application and Configuration Settings" section. Also, there is a marketplace extention named [Replace Tokens](https://marketplace.visualstudio.com/items?itemName=qetza.replacetokens) that works well for replacing tokens in arbitrary files. 
 
-In [exercise 4](exercise_4.md) we will use [Secure Files](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/secure-files?view=azure-devops) to load in an entire json file of settings which works well if you don't want to input a bunch of pipeline variables and also can be used to hide secrets from devops staff.
+In [exercise 4](exercise_4.md) we will move out of DevOps and into the Azure portal to explore App Service Application Settings and Slots

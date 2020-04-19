@@ -1,6 +1,8 @@
 
 ############
-## IN VS CODE, TO RUN ONLY A SECTION OF CODE, SELECT THE LINES YOU WANT TO RUN AND PRESS F8
+## IN VS CODE, YOU CAN EXECUTE JUST THE SELECTED LINES BY SELECTING THE 
+## LINES YOU WANT TO RUN AND PRESSING F8 OR CLICKING THE "RUN SELECTION"
+## BUTTON IN THE TOP RIGHT CORNER.
 ###########
 
 # You can use this to test the application or you can use any web client like
@@ -76,5 +78,26 @@ $yourId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
     $secret = Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
 
 # Define an Access Policy for the DevOps Service Principal
-    $spid = "4adc34f1-4430-4d6b-ac9b-52c9e3cb9c83" 
+    $spid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" 
     Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ObjectId $spid -PermissionsToSecrets get, list
+
+
+## ███████╗██╗  ██╗███████╗██████╗  ██████╗██╗███████╗███████╗    ██╗  ██╗
+## ██╔════╝╚██╗██╔╝██╔════╝██╔══██╗██╔════╝██║██╔════╝██╔════╝    ██║  ██║
+## █████╗   ╚███╔╝ █████╗  ██████╔╝██║     ██║███████╗█████╗      ███████║
+## ██╔══╝   ██╔██╗ ██╔══╝  ██╔══██╗██║     ██║╚════██║██╔══╝      ╚════██║
+## ███████╗██╔╝ ██╗███████╗██║  ██║╚██████╗██║███████║███████╗         ██║
+## ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝╚══════╝╚══════╝         ╚═╝
+
+# Create another KeyVault secret
+    $bankVaultCombination = ConvertTo-SecureString -String "10-31-15-3" -AsPlainText -Force
+    $secret = Set-AzKeyVaultSecret -Name "BankVaultCombination" -VaultName $kv.VaultName -SecretValue $bankVaultCombination
+
+# Enable Managed Identity for Azure Resources    
+# Don't forget to change $appname to match yours
+    $appname = "aqixjv2y-igas-01"
+    Set-AzWebApp -AssignIdentity $true -Name $appname -ResourceGroupName $groupName 
+    
+# Create Access Policy for Managed Identity
+    $svcPrincipal = Get-AzADServicePrincipal -DisplayName $appname
+    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ObjectId $svcPrincipal.Id -PermissionsToSecrets get, list
