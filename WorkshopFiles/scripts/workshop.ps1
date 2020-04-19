@@ -56,6 +56,9 @@ $newurl = "https://$prefix-igas-01.azurewebsites.net"
 
 # Be sure to connect to your Azure subscription first
 
+# You will need the objectId of your Azure AD account. Get it from the portal and set it here:
+$yourId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
 # Create a KeyVault
 
     # Once again we need to make an Azure-unique name so we will randomize it.
@@ -65,14 +68,13 @@ $newurl = "https://$prefix-igas-01.azurewebsites.net"
     $location = "East US"
     $kv = New-AzKeyVault -Name "kv-$rndName-igas-01" -ResourceGroupName $groupName -Location $location 
 
-    # Give yourself access to the keyvault
-    $context = Get-AzContext
-    $you = Get-AzADUser -UserPrincipalName "tekhed_2000_hotmail.com#EXT#@tekhed2000hotmail.onmicrosoft.com"
-    
-    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ServicePrincipalName $Context.Account.Id -PermissionsToSecrets get, list, set, delete, backup, restore, recover, purge
+    # Give yourself full access to the keyvault
+    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ObjectId $yourId -PermissionsToSecrets get, list, set, delete, backup, restore, recover, purge
     
     # Add a secret
     $passwordAsSecureString = ConvertTo-SecureString -String "P@ssw0rd1" -AsPlainText -Force
     $secret = Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
 
-  
+# Define an Access Policy for the DevOps Service Principal
+    $spid = "4adc34f1-4430-4d6b-ac9b-52c9e3cb9c83" 
+    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ObjectId $spid -PermissionsToSecrets get, list
