@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
@@ -11,15 +12,19 @@ namespace IGAS
         public static void Main(string[] args)
         {
             var builder = CreateHostBuilder(args);
-            AddPrefixToEnvVarConfigSrc(builder).Build().Run();
+            AddProdSettingsAndPrefixEnvVars(builder).Build().Run();
         }
 
-        /// Locate the EnvironmentVariables configuration source in the Host Builder and
-        /// set a prefix so only prefixed environment variables will get injested.
-        internal static IHostBuilder AddPrefixToEnvVarConfigSrc(IHostBuilder builder)
+        internal static IHostBuilder AddProdSettingsAndPrefixEnvVars(IHostBuilder builder)
         {
             return builder.ConfigureAppConfiguration(config =>
             {
+                // Will be explained in exercise 5
+                config.AddJsonFile("prod_appsettings.json", optional: true);
+
+                /// To reduce noise in our API results, locate the EnvironmentVariables 
+                /// configuration source in the Host Builder and set a prefix so only 
+                /// prefixed environment variables will get injested.
                 var envVarConfigSrc = config.Sources.Where(s =>
                    s.GetType() == typeof(EnvironmentVariablesConfigurationSource))
                    .Single();
