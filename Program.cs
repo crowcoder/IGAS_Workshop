@@ -12,6 +12,8 @@ namespace IGAS
         public static void Main(string[] args)
         {
             var builder = CreateHostBuilder(args);
+
+            //Tweaking configuration
             AddProdSettingsAndPrefixEnvVars(builder).Build().Run();
         }
 
