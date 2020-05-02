@@ -4,10 +4,15 @@ Exercise 3 introduced you to Variable Groups which are variables stored globally
 
 Additionally, if developer access to the Library and the Azure App Service are restricted, this is a great way to utilize secrets that the developer does not have access to.
 
-The basic idea is:
-1. Store a json file of configuration in the DevOps Library
-1. In the start up of your .NET Core application, do an Add() of a json file by the same name.
-1. For non-production environments, use configuration values that are stored in User Secrets, appsettings.Development.json, or wherever you prefer.
-1. In the Release pipeline, copy the secure file into the publish directory so it deploys along with your application. You could also do this in the build pipeline, but makes restricting user access more work. By copying the file during the Release it is not part of the build artifact that is genarally available to developers that manage builds.
+The basic idea is to store a json file containing configuration settings in the DevOps Library and copy it into your publish folder during a Release. If, in the start up of your .NET Core application you do an Add() of a json file by the same name as your secure file, your application will pull the settings into Configuration the same as if you put your settings into appsettings.json or any other provider. Doing this during the Release instead of the Build keeps the file out of the build artifact and thus makes it easier to restrict access.
+
+You may have noticed that in [program.cs](/Program.cs) there is a line of code that adds a json file named "prod_appsettings.json" to Configuration. This was designated optional but now we are going to make use of it.
+
+#### Extend the Release to Bring in prod_appsettings.json
+
+
+
+
+
 
 
