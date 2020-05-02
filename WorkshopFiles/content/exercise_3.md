@@ -47,6 +47,8 @@ To visualize what you have just done, locate your new KeyVault in the Azure Port
 
 #### Pipeline Variables
 
+> OBJECTIVE: Learn how to create and consume pipeline variables.
+
 We have some more work to do in our Release pipeline. Perform these steps to create a pipeline variable that will be used to supply the value for the `__ConnectionString__` token that is currently in our *appsettings.json* file.
 
 1. Go To Releases
@@ -121,13 +123,16 @@ We have some more work to do in our Release pipeline. Perform these steps to cre
  | ![Step 1](./img/variable_grp_14.png) | | |
 
  #### Wire in a KeyVault Secret
+ 
+ > Objective: Learn how to connect an Azure KeyVault to a pipeline and consume its secrets.
+
 There are various reasons why you may want to pull values from a KeyVault. The most compelling, in my opinion, is that the value can be hidden even from developers and Ops personnel that maintain the pipelines. To truly hide the value there are additional access restrictions that need to be employed on the App Service, but it is a feasible solution if there are company secrets that are only trusted with a select group of individuals. 
 > It is also possible to hide values and restrict access by [encrypting them directly in the pipeline variables](./img/encrypt_var.png)
 
 To accomplish this, we will add a new Task to our Release pipeline that currently has only one Task. We will add a KeyVault task that, similiar to Variable Groups, pulls KeyVault secrets into the pipeline and makes them available for use.
 
 1. Begin editing the IGAS Release. Click "+" to add a task to the pipeline.
-1. Search for "azure key vault". Make sure the one you find looks like the screenshot. Click "Add".
+1. Search for "azure key vault". **Make sure the one you find looks like the screenshot**. Click "Add".
 1. Configure the display name as desired, select the Azure subscription you are working with, choose the correct KeyVault and "Save"
 1. Now drag the KeyVault step above the Deploy step so it runs first. Then "Save".
 1. At this point, the Release pipeline is configure to attempt to pull KeyVault values, but it currently has no access to do so. Click the gear icon and select "Service connections". A service connection is much like a user account in Azure Active Directory, except it is an application identity instead of a user identity. It was created automatically when you "Authorized" the Azure connection during the creation of the Release pipeline.

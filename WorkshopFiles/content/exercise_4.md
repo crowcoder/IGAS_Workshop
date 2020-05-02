@@ -4,6 +4,8 @@ At this point you have seen a variety of ways to configure settings in code and 
 
 Let's dig right in and set a configuration value.
 
+> OBJECTIVE: Learn to add configuration settings to an App Service in the Azure portal.
+
 1. From Home in the Azure portal select App Services.
 1. Click the App Service you have been working with.
 1. Open the Configuration blade.
@@ -45,6 +47,9 @@ Then the SCM URL is here:
 | ![Step 1](./img/kudu_1.png) | ![Step 2](./img/kudu_2.png) | ![Step 3](./img/kudu_3.png) |
 
 #### More fun with KeyVault
+
+> OBJECTIVE: Learn to use a KeyVault secret reference in Azure App Service configuration.
+
 One of my favorite features of App Services is how easy and yet secure it is to pull KeyVault secrets into configuration. Lets do this now. In the Exercise #4 section of [workshop.ps1](../scripts/workshop.ps1) run the following lines to create another KeyVault secret. You may find you need to re-connect or re-set some variables:
 
 ```Powershell
@@ -87,12 +92,24 @@ Now we have configured our App Service to have read access to our KeyVault's sec
 | ![Step 7](./img/kv_ref_7.png) | ![Step 8](./img/kv_ref_8.png) | ![Step 9](./img/kv_ref_9.png) |
 
 #### Slot Settings
+
+> OBJECTIVE: Learn what slot deployments are and how to use them. Configure settings such that they either stick to a slot, or apply to all slots.
+
 The last bit of magic we will do in the Azure Portal is to enable slots for our application and provide slot-specific configuration. 
 > [**Slots Documentation**](https://docs.microsoft.com/en-us/azure/app-service/deploy-staging-slots)
 
-Slots used to be called "testing in production". While I prefer the term "slots", the old name is descriptive. It allows you to deploy your application to the production App Service, but on a differt URL. From there testing can be done, and when everything looks good, you perform a simple "swap" and what you just deployed to the test slot is now full production. This is a great feature. If you currently do production deployments directly to production you know that as soon as you pull that trigger it either works or it doesn't. This can lead to chaos if it doesn't. With slots, if it doesn't work then you just do not swap. You fix the issue, re-deploy to the staging slot, and test again. If a bug is found after a swap, you can swap again to roll back.
+Slots used to be called "testing in production". While I prefer the term "slots", the old name is admittedly descriptive. It allows you to deploy your application to the production App Service, *but on a differt URL*. Testing can be done at this staging URL, and when everything looks good, you perform a simple "swap" and what you just deployed to the test/staging slot is now full production. This is a great feature. If you currently do production deployments directly to production you know that as soon as you pull that trigger it either works or it doesn't. This can lead to chaos if it doesn't. With slots, if it doesn't work in the staged slot then you just do not perform the swap. You fix the issue, re-deploy to the staging slot, and test again. If a bug is found after a swap, you can swap again to roll back.
 
 Let's enable slots for our application and tweak some configuration.
+
+1. Open the Deployment Slots blade of your Azure App Service in the Azure portal and click "Add Slot".
+1. Give it a name, "Staging" being a good choice. Choose to copy settings from the existing App Service. Click "Add".
+1. Click your new slot to see its Overview.
+1. Note its URL is different than your "production" app service. However, there is no application there yet. Creating a slot does not carry over any deployed application. 
+1. Now navigate over to DevOps and open the Release pipeline. Select the "Deploy Azure App Service" task. Edit this task to deploy to the slot we just created. Your Resource Group and Slot selections should be available in the drop down lists. Be sure to Save your changes.
+1. Now create a Release and Deploy both the DEV and PROD stages.
+1. Make a GET request to the staging URL and observe that the deployment succeeded.
+1. 
 
  | Step 1 | Step 2 | Step 3 | 
  | --- | --- | --- |

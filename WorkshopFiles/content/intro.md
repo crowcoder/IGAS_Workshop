@@ -15,4 +15,6 @@ This workshop will guide you through step-by-step exercises including:
 * Configuring and obtaining secrets from pipeline Variables, shared Library Variable Groups and Secure Files.
 * Transforming json configuration files during release pipelines.
 
+In this course you will be working with Azure Powershell commandlets. For best results, try to keep your Powershell terminal open throughout the workshop. Once you have authenticated and set your default Azure subscription (if necessary), you will not need to worry about those steps again unless you have to restart a new terminal session.
+
 Please move on to view the prerequisites in [prereqs.md](./prereqs.md)
