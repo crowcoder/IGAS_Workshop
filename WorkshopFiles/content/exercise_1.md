@@ -159,7 +159,7 @@ As a conscientious developer who is careful to keep configuration secrets out of
 ```
 
 6. Add a secret, again with the dotnet cli: `dotnet user-secrets set "MyUserSecret" "ABCXYZ"`
-7. In a text editor, inspect the json file that was created by the `set` command. On Windows go to %APDATA%\Microsoft\UserSecrets\<generated guid>\secrets.json . The contents of the file will be:
+7. In a text editor, inspect the json file that was created by the `set` command. On Windows go to `%APPDATA%\Microsoft\UserSecrets\~generated guid~\secrets.json` . The contents of the file will be:
 
 ```JSON
     {
