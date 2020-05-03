@@ -58,28 +58,33 @@ $newurl = "https://$prefix-igas-01.azurewebsites.net"
 
 # Be sure to connect to your Azure subscription first
 
-# You will need the objectId of your Azure AD account. Get it from the portal and set it here:
-$yourId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+# You will need the objectId of your Azure AD account. Run this command and copy the Id
+# from the output for your account. Note this command can return multiple accounts if
+# more than one matches the search string.
+    Get-AzADUser -SearchString 'your name here'
 
 # Create a KeyVault
 
     # Once again we need to make an Azure-unique name so we will randomize it.
     $rndName = [System.IO.Path]::GetFileNameWithoutExtension([System.IO.Path]::GetRandomFileName())
 
-    $groupName = "rg-igas-01"
-    $location = "East US"
-    $kv = New-AzKeyVault -Name "kv-$rndName-igas-01" -ResourceGroupName $groupName -Location $location 
+    $kv = New-AzKeyVault -Name "kv-$rndName-igas-01" -ResourceGroupName "rg-igas-01" -Location "East US" 
 
     # Give yourself full access to the keyvault
-    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ObjectId $yourId -PermissionsToSecrets get, list, set, delete, backup, restore, recover, purge
+    Set-AzKeyVaultAccessPolicy `
+        -VaultName $kv.VaultName `
+        -ObjectId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" `
+        -PermissionsToSecrets get, list, set, delete, backup, restore, recover, purge
     
-    # Add a secret
+# Add a secret
     $passwordAsSecureString = ConvertTo-SecureString -String "P@ssw0rd1" -AsPlainText -Force
-    $secret = Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
+    Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
 
 # Define an Access Policy for the DevOps Service Principal
-    $spid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" 
-    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ObjectId $spid -PermissionsToSecrets get, list
+    Set-AzKeyVaultAccessPolicy `
+        -VaultName $kv.VaultName `
+        -ObjectId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" `
+        -PermissionsToSecrets get, list
 
 
 ## ███████╗██╗  ██╗███████╗██████╗  ██████╗██╗███████╗███████╗    ██╗  ██╗

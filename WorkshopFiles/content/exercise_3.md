@@ -2,44 +2,49 @@
 
 Very often we have multiple environments that our applications need to be deployed to. In this workshop we will have two - "DEV" and "Production". For simplicity we have left out other, traditional environments like QA and UAT, but the following concepts apply exactly the same.
 
-We only want a single code base so that is why we have application configuration. Dev configuration values need to be different from Production configuration values. We are going to experiment with JSON file token replacement. At the time of release, we will substitute token values in json files with environment-specific values. We will do this via 3 methods:
+We only want a single code base so that is why we have application configuration. Dev configuration values need to be different from Production configuration values. We are going to experiment with JSON file value replacement. During the execution of a release, we will substitute placeholder values in json files with environment-specific values. We will do this via 3 methods:
 1. Pipeline variables
 1. Variable groups
 1. Azure KeyVault values
 
-You may recall from a previous exercise that we have 3 appsettings.json settings that are just placeholders: *\_\_ConnectionString\_\_*, *\_\_Password\_\_* and *\_\_StockQuoteAPIURL\_\_*. These are our tokens that will be replaced during the Release.
+You may recall from a previous exercise that we have 3 appsettings.json settings that have no value: *ConnectionString*, *Password* and *StockQuoteAPIURL*. The values for these settings will be set during the Release.
 
 Let's get the creation of our KeyVault out of the way. You will incorporate this KeyVault into the DevOps Release pipeline in a moment. 
-A KeyVault is an Azure service that securely stores keys, secrets and certificates. In this workshop, we will only work with *secrets*. An Azure release pipeline has the capability to read from a KeyVault, making it a great choice for storing secrets that not even a developer needs to know.
+A KeyVault is an Azure service that securely stores keys, secrets and certificates. In this workshop, we will only work with *secrets*. An Azure release pipeline has the capability to read from a KeyVault, making it a great choice for storing secrets.
 
-Scroll down to the *Exercise 3* section of the workshop [powershell script](../scripts/workshop.ps1). If you have started a new Powershell session since Exercise 2 then you may need to `Connect-AzAccount` again. 
+You will need the ObjectId of your Azure Active Directory account. Following is how to find it with PowerShell. You can also find this in the Azure Portal from Azure Active Directory. If you don't know how to find it, view [this gif](../content/img/get_ad_object_id.gif).
 
-You will need the ObjectId of your Azure Active Directory account. You can find this in the Azure Portal. If you don't know how to find it, view [this gif](../content/img/get_ad_object_id.gif).
+Run this command with a search string that contains part or all of your name as it appears in Azure Active Directory. Copy the value of `Id`:
+````Powershell
+    Get-AzAdUser -SearchString 'bob'
+````
+Output:
+````
+    UserPrincipalName : tekhed_2000_hotmail.com#EXT#@tekhed2000hotmail.onmicrosoft.com
+    ObjectType        : User
+    DisplayName       : Bob Crowley
+    Id                : xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+````
+Once you have the `Id`, paste it into the `ObjectId` below where you see: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. These commands create a new KeyVault, give you an Access Policy to it, and create one secret within it. You may receive warnings during the execution of this script but it should still complete successfully.
 
-Once you have the ObjectId, set it as the value of `$yourId` in the script below and then execute all lines. These commands create a new KeyVault, give you an Access Policy to it, and create one secret within it.
-
-By default you have no access to a KeyVault so you must set an Access Policy to grant yourself permissions. Later, we will have to do this again to give Azure DevOps access to read secrets.
-
-```
-# You will need the objectId of your Azure AD account. Get it from the portal and set it here:
-$yourId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-
-# Create a KeyVault
+````Powershell
+    # Create a KeyVault
 
     # Once again we need to make an Azure-unique name so we will randomize it.
     $rndName = [System.IO.Path]::GetFileNameWithoutExtension([System.IO.Path]::GetRandomFileName())
 
-    $groupName = "rg-igas-01"
-    $location = "East US"
-    $kv = New-AzKeyVault -Name "kv-$rndName-igas-01" -ResourceGroupName $groupName -Location $location 
+    $kv = New-AzKeyVault -Name "kv-$rndName-igas-01" -ResourceGroupName "rg-igas-01" -Location "East US" 
 
     # Give yourself full access to the keyvault
-    Set-AzKeyVaultAccessPolicy -VaultName $kv.VaultName -ObjectId $yourId -PermissionsToSecrets get, list, set, delete, backup, restore, recover, purge
+    Set-AzKeyVaultAccessPolicy `
+        -VaultName $kv.VaultName `
+        -ObjectId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" `
+        -PermissionsToSecrets get, list, set, delete, backup, restore, recover, purge
     
     # Add a secret
     $passwordAsSecureString = ConvertTo-SecureString -String "P@ssw0rd1" -AsPlainText -Force
-    $secret = Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
-```
+    Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
+````
 #### Observe the results of the script
 To visualize what you have just done, locate your new KeyVault in the Azure Portal and drill into secret to view it's value. You will notice that secrets are *versioned*. This workshop does not cover versioning but I encourage you to research this and more about KeyVault.
 
@@ -49,12 +54,12 @@ To visualize what you have just done, locate your new KeyVault in the Azure Port
 
 > OBJECTIVE: Learn how to create and consume pipeline variables.
 
-We have some more work to do in our Release pipeline. Perform these steps to create a pipeline variable that will be used to supply the value for the `__ConnectionString__` token that is currently in our *appsettings.json* file.
+We have some more work to do in our Release pipeline. Perform these steps to create a pipeline variable that will be used to supply the value for the `ConnectionString` setting that is currently in our *appsettings.json* file.
 
 1. Go To Releases
 1. Locate the "IGAS Release", select it, and click "Edit"
 1. Click Variables
-1. Click +Add and enter "ConnectionString". It is important that the text exactly match the json value, without the underscores. Give it a value, it does not have to be a valid connection string for this demo
+1. Click +Add and enter "ConnectionString". It is important that the text exactly match the json setting name. Give it a value, it does not have to be a valid connection string for this demo
 1. Save the pipeline changes
 
   | Step 1 | Step 2 | Step 3 | 
@@ -75,7 +80,7 @@ We have some more work to do in our Release pipeline. Perform these steps to cre
  | ![Step 1](./img/replace_token_1.png) | ![Step 2](./img/replace_token_2.png) |
 
  #### Deploy the pipeline
- Now let's deploy the application again and observe the results. But first, you may want to make a GET request to your application to refresh your memory of what is returned for "ConnectionString". At this time it should be "\_\_ConnectionString\_\_".
+ Now let's deploy the application again and observe the results. But first, you may want to make a GET request to your application to refresh your memory of what is returned for "ConnectionString". At this time it should be empty.
 
  1. Click "Create release"
  1. Click "Create"
@@ -89,7 +94,7 @@ We have some more work to do in our Release pipeline. Perform these steps to cre
  | **Step 4** | **Step 5** | | 
  | ![Step 4](./img/deploy_cnxnstr_4.png) | ![Step 5](./img/deploy_cnxnstr_5.png) | |
 
- Now when you make a GET request to `/Configuration` or `/Configuration/all` you should see the value of the pipeline variable in `ConnectionString` instead of "\_\_ConnectionString\_\_".
+ Now when you make a GET request to `/Configuration` or `/Configuration/all` you should see the value of the pipeline variable in `ConnectionString`.
 
  ![new connection string](./img/new_cnxnstr.png)
 
