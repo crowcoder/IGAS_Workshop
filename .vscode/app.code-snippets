@@ -1,0 +1,31 @@
+{
+    "Use Manual Config": {
+		"scope": "csharp",
+		"prefix": "manconfig",
+		"body": [
+			"CreateDefaultBuilderManually(args).UseStartup<Startup>().Build().Run();"
+		],
+		"description": "Code to use manual configuration instead of dotnet default webapi template code."
+    },
+    "Obtain Env Var": {
+        "scope": "csharp",
+        "prefix": "getenvvar",
+        "body" :["string EnvVarValue =_config.GetValue<string>(\"SECRET_ENV_VAR\") ?? \"NOT SET\";"],
+        "description": "Writes the code obtain the SECRET_ENV_VAR environment variable value"
+    },
+    "Get All Settings":{
+      "scope": "csharp",
+      "prefix": "getall",
+      "body": [
+        "string envVar = _config.GetValue<string>(\"TMP\") ?? \"NOT SET\";",
+        "string userSecret = _config.GetValue<string>(\"MyUserSecret\") ?? \"NOT SET\";",
+        "string appSetting = _config.GetValue<string>(\"FromAppSettings\") ?? \"NOT SET\";",
+        "",
+        "return new string[] {",
+            " $\"Environment Variable TMP = {envVar}\",",
+            " $\"User Secret MyUserSecret = {userSecret}\",",
+            " $\"App Setting FromAppSettings = {appSetting}\"",
+     "};"
+      ]
+    }
+}
