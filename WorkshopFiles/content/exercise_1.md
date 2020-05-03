@@ -47,7 +47,7 @@ You should now see the new configuration value in the body of the response:
 
 Let's dive a little deeper in the Configuration Providers. This material provides the base of understanding for all the work we will do from here on out, including Azure.
 
-In the root of the project, there is `Program.cs`. If you think this file looks like a console application, that's because it is. .NET Core applications are console applications that happen to get hosted by something like Internet Information Services. The following code is executed at startup, we mostly just care about the numbered lines. Please note that this code is an edited version of the ASP .NET Core source code. The default project template abstracts this away but it is valuable for demonstration:
+In the root of the project, there is `Program.cs`. If you think this file looks like a console application, that's because it is. .NET Core applications are console applications that happen to get hosted by something like Internet Information Services. The following code is executed at startup, but we mostly just care about the numbered lines. Please note that this code is an edited version of the ASP .NET Core source code. The default project template abstracts this away but adding it back here is valuable for demonstration:
 
 ```CSharp
         public static IWebHostBuilder CreateDefaultBuilderManually(string[] args)
