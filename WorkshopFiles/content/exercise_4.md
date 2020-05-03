@@ -109,7 +109,7 @@ Let's enable slots for our application and tweak some configuration.
 1. Now navigate over to DevOps and open the Release pipeline. Select the "Deploy Azure App Service" task. Edit this task to deploy to the slot we just created. Your Resource Group and Slot selections should be available in the drop down lists. Be sure to Save your changes.
 1. Now create a Release and Deploy both the DEV and PROD stages.
 1. Make a GET request to the staging URL and observe that the deployment succeeded.
-1. 
+1. Make a GET request to the production URL and observe it is still online.
 
  | Step 1 | Step 2 | Step 3 | 
  | --- | --- | --- |
@@ -124,3 +124,9 @@ Let's enable slots for our application and tweak some configuration.
 | ![Step 13](./img/slot_13.png) | ![Step 14](./img/slot_14.png) | ![Step 15](./img/slot_15.png) |
  | **Step 16** | **Step 17** | | 
 | ![Step 16](./img/slot_16.png) | ![Step 17](./img/slot_17.png) |  |
+
+Now we have two active slots. In a testing scenario, you can direct your testers to the staging slot without affecting production operations (with the caveat that resources such as databases, etc., might still be the same depending on your needs).
+
+Let's explore configuration settings and how they behave in slot deployments. We will use the MaxTTL configuration setting to observe it either changing or not changing between the slots, depending on how it is defined.
+
+1. Access the Configuration blade of the production slot and

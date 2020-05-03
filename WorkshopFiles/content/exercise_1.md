@@ -5,11 +5,11 @@ The IGAS (I've Got a Secret) application is a ASP.NET API. There are no web page
 If you are familiar with the `dotnet` cli, you might notice the source code differs from what you get when you create a new application: `dotnet new webapi`. The difference is intentional - some of what is normally abstracted has been explicitly written for educational purposes and is the reason the term "Manually" appears in the method name.
 
 ### A little bit about .NET Core Configuration
-.NET Core is a major overhaul to the configuration system previously used by .NET Framework applications. When I say "configuration", I'm talking about data that cannot or is not practical to be set at development time. Commonly configured values include URL's, file paths, passwords, etc. - things that have test values during debugging but production values when running live. It has often been a challenge to store configuration such that it is not exposed. .NET Core provides various ways to keep these potentially sensitive values out of source control repositories.
+Configuration in .NET Core is a major overhaul to the system previously used by .NET Framework applications. When I say "configuration", I'm talking about data that cannot or is not practical to be set at development time. Commonly configured values include URL's, file paths, passwords, etc. - things that have test values during debugging but production values when running live. It has often been a challenge to store configuration such that it is not exposed. .NET Core provides various ways to keep these environment specific and potentially sensitive values out of source control repositories.
 
 > [More Information on .NET Core Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1)
 
-In .NET Core, configuration can come from nearly any conceivable source, know as Providers. - JSON, XML and INI files, Azure Keyvault, command line arguments, environment variables, User Secrets, and the list goes on. You can even implement your own configuration provider if none of the existing ones meet your needs.
+In .NET Core, configuration can come from nearly any conceivable source, know as Providers. - JSON, XML and INI files, Azure Keyvault, command line arguments, environment variables, User Secrets, and the list goes on. You can even implement your own configuration provider if none of the existing ones meets your needs.
 
 Let's begin exploring configuration by adding a setting to the JSON file in the sample project.
 
