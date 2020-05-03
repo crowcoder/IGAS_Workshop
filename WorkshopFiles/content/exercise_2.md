@@ -22,11 +22,18 @@ Make sure you have completed the prerequisites so you have an Azure DevOps organ
  In just a moment you will create a Build of the project in Azure DevOps. But first, let's go over what I have changed between what you have done so far on the master branch and Prod branch which we will be working with from here on out. You can view the files in the DevOps user interface or in your IDE by changing to the Prod branch.
 
  #### Changes to Program.cs
-In the setup of the Environment Variable configuration provider I have included a prefix argument of "IGAS_". This means that only environment variables that begin with "IGAS_" will be pulled into configuration. Note that the prefix itself will be removed. If you have an environment variable named "IGAS_Password" then your C# code will need to look for just "Password".
 
 ```CSharp
- config.AddEnvironmentVariables(prefix: "IGAS_");
+  //Tweaking configuration
+  AddProdSettingsAndPrefixEnvVars(builder).Build().Run();
 ```
+
+ I have reverted the code back to using the default host builder, except I have injected two things. 
+
+ First, another json file is added. We will see this again in exercise 5. For now you can basically ignore it.
+
+ Next, in the setup of the Environment Variable configuration provider I have included a prefix argument of "IGAS_". This means that only environment variables that begin with "IGAS_" will be pulled into configuration. Note that the prefix itself will be removed. If you have an environment variable named "IGAS_Password" then your C# code will need to look for just "Password". I have done this simply to remove "noise" from our request results. Seeing every environment variable echoed back would be overwhelming.
+
  #### Changes to ConfigurationController.cs
 The `Get()` method has been modified to return all configuration settings instead of writing a line of code for each one (e.g. `_config.GetValue<string>("..setting..")`). This will allow us to focus on how and where to set configuration without needing to make a bunch of code edits. It also facilitates experimentation because any changes you make, regardless of the technique, will echo back from your API call.
  ```CSharp
@@ -35,25 +42,34 @@ var AllConfigSettings = _config.AsEnumerable()
 
 return AllConfigSettings;
 ```
+Additionally, another action has been added that will also return all configuration items, except it will group and display them by provider. Normally you do not care what provider a setting comes from but this information is helpful for demonstration purposes. It gives visibility into how you can provide a setting from one provider at debug time and another in production. You access this action by adding "/all" to your request URL.
+
+````CSharp
+  [HttpGet]
+  [Route("all")]
+  public IEnumerable<ProviderViewModel> GetAll()
+  //...
+````
 #### Changes to appsettings.json
-The appsettings file has been modified to include a few fictitious settings. The values are formatted as "\_\_*value*\_\_". The double underscores are meant to make the value a "token" that can be replaced during deployment.
+The appsettings file has been modified to include a few fictitious settings. The values are blank because they will be filled in by the Azure DevOps Release pipeline. 
 ```JSON
 {
-    "ConnectionString" : "__ConnectionString__",
-    "StockQuoteAPIURL" : "__StockQuoteAPIURL__",
-    "Password" : "__Password__"
+    "ConnectionString" : "",
+    "StockQuoteAPIURL" : "",
+    "Password" : ""
 }
 ```
 <a id="setupabuild"></a>
  ## Setup a Build
- We don't have a lot of work to do in the Build pipeline. There are no configuration steps included here (though you could), we just need to have a published project to deploy in the Release pipeline. It is in the Release Pipeline that we will manage configuration.
+ We don't have a lot of work to do in the Build pipeline. There are no configuration steps included here (though you could), we just need to have a published project to deploy in the Release pipeline. It is in the Release Pipeline that we will manage most configuration. In exercise 5 we will revisit this build when we work with Secure Files.
  > [More information on Build pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops#package-and-deliver-your-code)
 
 1. Click on the Rocket Ship icon to open Pipelines and then click "Create Pipeline"
 1. Choose Azure Repos Git YAML
 1. Select the IGAS Git code repository
 1. (this step may not be necessary, your .yml file may be chosen automatically) Select Existing Azure Pipelines YAML file. 
-1. (this step may not be necessary, your .yml file may be chosen automatically) Select the "prod" branch and "azure-pipelines.yml" file.
+1. (this step may not be necessary, your .yml file may be chosen automatically) **Select the "prod" branch** and "azure-pipelines.yml" file.
+    > VERY IMPORTANT: make sure you select the prod branch, not master. The master branch was hacked up to demonstrate configuration providers and sections that are required for Azure hosting were removed and therefore will not run in Azure.
 1. Click run to build the project and produce an artifact that will be deployed later in a Release pipeline.
 1. Review the successful deployment.
 
@@ -77,42 +93,62 @@ The appsettings file has been modified to include a few fictitious settings. The
 
 > [workshop.ps1 in the scripts folder has all the commands you will see here, in an easier to execute format](../scripts/workshop.ps1)
 
-You will execute the following Powershell commands to create a Resource Group, an Azure App Service Plan, and a Web App, **but edits are required.**
-1. [Optional] If your default subscription is not the one you want to use for this workshop, uncomment **line 10** and enter the Azure Subscription ID you want to use.
-1. [Optional] On **line 15** change the location to a region closest to you.
-1. On **line 24** enter a value to be used as a prefix to the web app name. This must be unique across Azure. Your site will be accessed at "https://~your prefix~-igas-01.azurewebsites.net". Feel free to completely change this name as desired.
+You will execute the following Powershell commands to create a Resource Group, an Azure App Service Plan, and a Web App.
+1. Connect to your Azure subscription. Run the following Powershell command and do the login dance. If you keep your Powershell terminal open throughout the workshop you should not need to log in again.
+    ```PowerShell
+    Connect-AzAccount
+    ````
+    Output:
+    ````
+    Account                 SubscriptionName                   TenantId                             Environment
+    -------                 ----------------                   --------                             -----------
+    tekhed_2000@hotmail.com Visual Studio Enterprise: BizSpark xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx AzureCloud
+    ````
+1. [**Optional**] If your default subscription is not the one you want to use for this workshop, then you will need to set it manually. Use the following command to acquire the subscription id you want to use:
+    ````Powershell
+    Get-AzSubscription
+    ````
+    Output (will vary):
+    ````
+    Name                    Id               TenantId
+    ----                    --               --------
+    Visual Studio E...     xxxxxxxx-xxxx...  xxxxxxxx-xxxx-...
+    Windows Azure M...     xxxxxxxx-xxxx-... xxxxxxxx-xxxx-...
+    ````
 
-```PowerShell
-# Authenticate to Azure
-Connect-AzAccount
+1. [**Optional**] If you need to change your active session's connected subscription, run this command to set it. Use the `Id` value from the subscription you chose to use from step 2.
+    ````Powershell
+    Set-AzContext -SubscriptionId "xxxxxxxx-xxxx..."
+    ````
+    Output:
+    ````
+    Name              Account              SubscriptionName           Environment            TenantId
+    ----              -------              ----------------           -----------            --------
+    Visual S...       tekhed_2000@...    Visual Studio E...           AzureCloud             xxxxxxxx-xxxx-...
+    ````
+1. The following commands create a Resource Group to contain all of the workshop-related resources, an App Service Plan which is the actual infrastructure that can run an application, then finally the App Service, with a random name. The random name is to ensure uniqueness across Azure since it is part of the public URL. It will likely take a few moments for all of the commands to complete.
+    ````PowerShell
+    # Create resource group to hold all resources for the tutorial.
+    # Change the region as appropriate for your location
+    $groupName = "rg-igas-01"
+    $location = "eastus"
+    New-AzResourceGroup -Name $groupName -Location $location
 
-# List the subscriptions your account has access to
-Get-AzSubscription
+    # Create an app service plan
+    $plan = New-AzAppServicePlan -Location $location  -Name "asp-igas-01" -ResourceGroupName $groupName -Tier "S1"
 
-# You may have multiple subscriptions. If the one you want to use for this tutorial
-# is not your default subscription, you can do this to change what subscription
-# this script will operate against.
-# Set-AzContext -SubscriptionId "<enter your subscription id>"
+    # Create the App Service to host the application
+    # The name has to be unique across all of Azure because it is part of the public URL.
+    # This generates a random name.
+    $prefix = [System.IO.Path]::GetFileNameWithoutExtension([System.IO.Path]::GetRandomFileName())
+    Write-Debug $prefix
+    $app = New-AzWebApp -ResourceGroupName $groupName -Name "$prefix-igas-01" -Location $location -AppServicePlan $plan.Id
 
-# Create resource group to hold all resources for the tutorial.
-# Change the region as appropriate for your location
-$groupName = "rg-igas-01"
-$location = "eastus"
-New-AzResourceGroup -Name $groupName -Location $location
+    # Browse to the URL of the new application to make sure the app service is up.
+    $newurl = "https://$prefix-igas-01.azurewebsites.net"
+    [System.Diagnostics.Process]::Start($newurl)
 
-# Create an app service plan
-$plan = New-AzAppServicePlan -Location $location  -Name "asp-igas-01" -ResourceGroupName $groupName -Tier "S1"
-
-# Create the App Service to host the application
-# The name has to be unique across all of Azure because it is part of the public URL.
-# Set the prefix variable to something unique, either completely random or meaningful, doesn't matter.
-$prefix = "???"
-$app = New-AzWebApp -ResourceGroupName $groupName -Name "$prefix-igas-01" -Location $location -AppServicePlan $plan.Id
-
-# Browse to the URL of the new application to make sure the app service is up.
-$newurl = "https://$prefix-igas-01.azurewebsites.net"
-[System.Diagnostics.Process]::Start($newurl)
-```
+    ````
 > Feel free to check out the App Service in Azure. It should look something like this:
 
 ![New App Service](./img/appsvc-1.png)
@@ -128,13 +164,15 @@ Now that you have a place to deploy your application, it is time to create a Rel
 1. Choose your Azure Subscription and click Authorize.
 1. Once the pipeline is authorized, you can choose the App Service from the drop down list.
 1. Save
-1. This is asking you to create or choose a folder to save the pipeline in. For simplicity you can just accept the default root folder. 
-1. Now that the pipeline is fully defined you can "Create a Release". This will run the pipeline as it exists at this time. You can re-execute a release at any time but it will be configured as it was at the time of creation. Any pipeline changes do not affect already executed releases, though you can edit a previous release and execute it if necessary.
+1. The save dialog is asking you to create or choose a folder to save the pipeline in. For simplicity you can just accept the default root folder. 
+1. Now that the pipeline is fully defined you can "Create a Release". 
 1. Now, execute a release. Click "Create".
 1. Click "Release-1" to go to the release instance you just created. As you create future releases they will become Release-2, Release-3, etc.
 1. The default release properties have it set to deploy automatically so you should see that it is running. You can configure it to only deploy manually if you prefer.
 1. When it is done you should see a Succeeded confirmation.
 1. Test the application to ensure it works. Make a GET request to the URL of your app service. Other than the random host name, it will be like this: https://aqixjv2y-igas-01.azurewebsites.net/Configuration/all . I have chosen to use Postman as my HTTP client. Notice there is not much configuration detail returned. Let's change that in [exercise 3](exercise_3.md).
+
+> IF YOUR APP ISN'T WORKING: You may have built the master branch instead of the prod branch. No worries, just go do another build, making sure to select the prod branch and then do another release from the Release pipeline you built above. 
 
 
   | Step 1 | Step 2 | Step 3 | 

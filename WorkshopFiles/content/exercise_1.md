@@ -174,11 +174,12 @@ Lets pull in a value from each of the registered providers and wire up our appli
 1. This will allow you to list the environment variables as if they were files in a folder. Now run `dir`
 1. Choose any variable you'd like to add to the API's output. I'm going to choose the `TMP` variable.
 1. Go back to ConfigurationController.cs and delete everything in the `Get()` method.
-1. Now use one of the code snippets by typing `getall` then tab. Your `Get()` method should look like this:
+1. Now replace the code with the listing below. If you are using VS Code, use one of the code snippets by typing `getall` then tab. Your `Get()` method should look like this:
     ````csharp
     [HttpGet]
     public IEnumerable<string> Get()
     {
+        // replace from here...
         string envVar = _config.GetValue<string>("TMP") ?? "NOT SET";
         string userSecret = _config.GetValue<string>("MyUserSecret") ?? "NOT SET";
         string appSetting = _config.GetValue<string>("FromAppSettings") ?? "NOT SET";
@@ -188,6 +189,7 @@ Lets pull in a value from each of the registered providers and wire up our appli
             $"User Secret MyUserSecret = {userSecret}",
             $"App Setting FromAppSettings = {appSetting}"
         };
+        // .. to here
     }
     ````
 1. Run the project and observe the output.

@@ -26,7 +26,7 @@ Get-AzSubscription
 # You may have multiple subscriptions. If the one you want to use for this tutorial
 # is not your default subscription, you can do this to change what subscription
 # this script will operate against.
-# Set-AzContext -SubscriptionId "<enter your subscription id>"
+Set-AzContext -SubscriptionId "<enter your subscription id>"
 
 # Create resource group to hold all resources for the tutorial.
 # Change the region as appropriate for your location
