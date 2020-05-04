@@ -10,7 +10,7 @@ Let's dig right in and set a configuration value.
 1. Click the App Service you have been working with.
 1. Open the Configuration blade.
 1. Click "+ New application setting".
-1. Enter a name and value. Here I'm setting a fictitions maximum time to live with a value of 30.
+1. Enter a name and value. Here I'm setting a fictitious maximum time to live with a value of 30. Click OK.
 1. Be sure to Save.
 1. Click "Continue" to save changes and restart your App Service.
 1. Wait for it to complete.
@@ -50,21 +50,22 @@ Then the SCM URL is here:
 
 > OBJECTIVE: Learn to use a KeyVault secret reference in Azure App Service configuration.
 
-One of my favorite features of App Services is how easy and yet secure it is to pull KeyVault secrets into configuration. Lets do this now. In the Exercise #4 section of [workshop.ps1](../scripts/workshop.ps1) run the following lines to create another KeyVault secret. You may find you need to re-connect or re-set some variables:
+One of my favorite features of App Services is how easy and yet secure it is to pull KeyVault secrets into configuration. Lets do this now. Run the following Powershell commands to create another KeyVault secret.
 
 ```Powershell
 # Create another KeyVault secret
     $bankVaultCombination = ConvertTo-SecureString -String "10-31-15-3" -AsPlainText -Force
-    $secret = Set-AzKeyVaultSecret -Name "BankVaultCombination" -VaultName $kv.VaultName -SecretValue $bankVaultCombination
+    $secret = Set-AzKeyVaultSecret `
+        -Name "BankVaultCombination" `
+        -VaultName $kv.VaultName `
+        -SecretValue $bankVaultCombination
 ```
 Next, your App Service must be granted access to the KeyVault. You will recall creating an access policy for the Azure DevOps service connection. We will do basically the same thing now, except instead of a DevOps service connection, we are granting access to the App Service itself. To make this happen we will enable a very powerful feature called Managed Identity. Managed Identities allow azure resources to have an identity, much like a user, and makes accessing secure resources easier and prevents storing secrets in code. 
-
-Imagine what would be required with a Managed Identity. Our application would have to store some credentials to access a KeyVault, or pass along an end user's credentials. With Managed Identity we can simply assign an access policy and implicitly allow access to KeyVault secrets. All of this interaction occurs securely within the Azure cloud.
 
 ```Powershell
 # Enable Managed Identity for Azure Resources    
 # Don't forget to change $appname to match yours
-    $appname = "aqixjv2y-igas-01"
+    $appname = "PUT YOUR APP SERVICE NAME HERE!"
     Set-AzWebApp -AssignIdentity $true -Name $appname -ResourceGroupName $groupName 
     
 # Create Access Policy for Managed Identity
@@ -78,9 +79,9 @@ Now we have configured our App Service to have read access to our KeyVault's sec
 1. Continue drilling into the secret details by clicking the CURRENT VERSION.
 1. Copy the Secret Identifier.
 1. Go back to your App Service, Configuration blade and begin adding a new application setting.
-1. For the name, enter "IGAS_BankVaultCombo". For the Value, enter: "@Microsoft.KeyVault(SecretUri= \<the Secret Identifier>)". Mine looks like this: *@Microsoft.KeyVault(SecretUri=https://kv-vi53gndb-igas-01.vault.azure.net/secrets/BankVaultCombination/d18bc738075e4c8ca24a346dc1fe8150)*
+1. For the name, enter "IGAS_BankVaultCombo". For the Value, enter: "@Microsoft.KeyVault(SecretUri= \<the Secret Identifier>)". Mine looks like this: *@Microsoft.KeyVault(SecretUri=https://kv-vi53gndb-igas-01.vault.azure.net/secrets/BankVaultCombination/d18bc738075e4c8ca24a346dc1fe8150)*. Click OK.
 1. Be sure to Save.
-1. If you did everything correctly, you will see a green checkmark indicating the KeyVault reference has been successfully resolved.
+1. If you did everything correctly, you will see a green checkmark indicating the KeyVault reference has been successfully resolved, though it may take a moment.
 1. Make a GET request to `/Configuration/all` and observe the value coming from a KeyVault secret.
 
  | Step 1 | Step 2 | Step 3 | 
@@ -103,13 +104,15 @@ Slots used to be called "testing in production". While I prefer the term "slots"
 Let's enable slots for our application and tweak some configuration.
 
 1. Open the Deployment Slots blade of your Azure App Service in the Azure portal and click "Add Slot".
-1. Give it a name, "Staging" being a good choice. Choose to copy settings from the existing App Service. Click "Add".
+1. Give it a name, "Staging" being a good choice. **Be sure to clone settings from the existing App Service**. Click "Add", and then "Close".
 1. Click your new slot to see its Overview.
 1. Note its URL is different than your "production" app service. However, there is no application there yet. Creating a slot does not carry over any deployed application. 
-1. Now navigate over to DevOps and open the Release pipeline. Select the "Deploy Azure App Service" task. Edit this task to deploy to the slot we just created. Your Resource Group and Slot selections should be available in the drop down lists. Be sure to Save your changes.
+1. Now navigate over to DevOps and begin editing the Release pipeline's PROD stage. Select the "Deploy Azure App Service" task. Edit this task to deploy to the slot we just created. Your Resource Group and Slot selections should be available in the drop down lists. Be sure to Save your changes.
 1. Now create a Release and Deploy both the DEV and PROD stages.
 1. Make a GET request to the staging URL and observe that the deployment succeeded.
 1. Make a GET request to the production URL and observe it is still online.
+
+// fix this!
 
  | Step 1 | Step 2 | Step 3 | 
  | --- | --- | --- |
