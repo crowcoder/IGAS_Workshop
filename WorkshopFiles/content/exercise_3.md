@@ -43,7 +43,7 @@ Once you have the `Id`, paste it into the `ObjectId` below where you see: `xxxxx
     
     # Add a secret
     $passwordAsSecureString = ConvertTo-SecureString -String "P@ssw0rd1" -AsPlainText -Force
-    Set-AzKeyVaultSecret -Name "PasswordSecret" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
+    Set-AzKeyVaultSecret -Name "Password" -VaultName $kv.VaultName -SecretValue $passwordAsSecureString
 ````
 #### Observe the results of the script
 To visualize what you have just done, locate your new KeyVault in the Azure Portal and drill into secret to view it's value. You will notice that secrets are *versioned*. This workshop does not cover versioning but I encourage you to research this and more about KeyVault.
@@ -99,7 +99,7 @@ We have some more work to do in our Release pipeline. Perform these steps to cre
  ![new connection string](./img/new_cnxnstr.png)
 
  #### Variable Groups
- You've just seen how to set a pipeline variable, but what if that connection string is commonly used by many of your applications? To avoid entering it into multiple pipelines, and updating multiple pipelines if it ever changes, you can create a Variable Group that is globally available. You then link it to your Release and the it's values will be available just the same as if you set a variable in the Release pipeline itself.
+ You've just seen how to set a pipeline variable, but what if that connection string is commonly used by many of your applications? To avoid entering it into multiple pipelines, and updating multiple pipelines if it ever changes, you can create a Variable Group that is globally available. You then link it to your Release and its values will be available just the same as if you set a variable in the Release pipeline itself.
 
  1. Hover over the Rocket Ship and select "Libraries".
  1. Click on "+Variable group".
@@ -145,7 +145,14 @@ To accomplish this, we will add a new Task to our Release pipeline that currentl
 1. We need some details to be able to find the account in Azure AD. Click "Manage Service Principal".
 1. Click the hyperlink under "Managed application in local directory".
 1. Copy the Object ID of the service principle being used by DevOps.
-1. In the Powershell script, set the value of `$spid` to the Object ID you just copied. Execute the two lines to create an Access Policy on the KeyVault, allowing the DevOps service principal read access to secrets.
+1. Execute this command to create an Access Policy on the KeyVault, allowing the DevOps service principal read access to secrets. Replace the `ObjectId` with the value you copied from the Azure Portal.
+    ````Powershell
+    # Define an Access Policy for the DevOps Service Principal
+    Set-AzKeyVaultAccessPolicy `
+        -VaultName $kv.VaultName `
+        -ObjectId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" `
+        -PermissionsToSecrets get, list
+    ````
 1. Create a release and deploy the application. Steps to create the release omitted this time, refer to previous examples if necessary.
 1. Make a GET request to `/Configuration` or `/Configuration/all` to observe the KeyVault secret value has been pulled into configuration.
 
@@ -164,7 +171,16 @@ The work we have done in exercise #3 is interesting, but where pipeline variable
 
 So lets add a PROD stage to the Deployment and configure a different connection string.
 
+1. Begin editing the Release.
+1. Hover the mouse under the DEV stage until "Clone" appears and then click it to create an identical copy of the DEV stage.
+1. You will now see the clone appear. Click the link "1 job, 2 tasks".
+1. Rename the stage to "PROD" and Save.
+1. Add another ConnectionString variable so there is one version for the DEV stage and one for PROD. On the Variable tab, change the current ConnectionString variable scope to DEV. Then, add a new variable with the same name. Give it a different value so we can see it change and finally set its scope to PROD. When a Release runs, the variable will have one value during the DEV stage and another during the PROD stage. In this way we can assign correct configuration to particular environments.
 1. 
+1.
+1.
+1.
+1. Make a request to your API. Observe the ConnectionString is returning the production value.
 
 #### Summary
 You have learned 3 techniques for supplying application configuration from within an Azure DevOps Release Pipeline. You used pipeline variables, variable groups and a KeyVault task. All three rely on the JSON variable substitution setting of the Deploy task to replace values in the chosen json file with variables obtained from the pipeline.
