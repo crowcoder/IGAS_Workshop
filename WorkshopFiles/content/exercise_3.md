@@ -175,12 +175,28 @@ So lets add a PROD stage to the Deployment and configure a different connection 
 1. Hover the mouse under the DEV stage until "Clone" appears and then click it to create an identical copy of the DEV stage.
 1. You will now see the clone appear. Click the link "1 job, 2 tasks".
 1. Rename the stage to "PROD" and Save.
-1. Add another ConnectionString variable so there is one version for the DEV stage and one for PROD. On the Variable tab, change the current ConnectionString variable scope to DEV. Then, add a new variable with the same name. Give it a different value so we can see it change and finally set its scope to PROD. When a Release runs, the variable will have one value during the DEV stage and another during the PROD stage. In this way we can assign correct configuration to particular environments.
-1. 
-1.
-1.
-1.
-1. Make a request to your API. Observe the ConnectionString is returning the production value.
+1. On the Variable tab, change the current ConnectionString variable scope to DEV. Then, add a new variable with the same name. Give it a different value so we can see it change, and finally set its scope to PROD. When a Release runs, the variable will have one value during the DEV stage and another during the PROD stage. In this way we can assign correct configuration to particular environments.
+1. Create a Release.
+1. Click the PROD stage to change it to a manual deploy. Currently, the pipeline is configured to deploy DEV and then PROD automatically. By changing the PROD stage to manual we will have a chance to observe how the ConnectionString changes.
+1. Click the link to view the Release in progress
+1. Wait for the DEV stage to complete.
+1. Make a request to your API. Observe the ConnectionString is returning the DEV value.
+1. Now go back and deploy the PROD stage.
+1. Click Deploy again.
+1. Wait for the Deployment to succeed.
+1. Make another request to your API. Observe the ConnectionString is returning the production value.
+
+ | Step 1 | Step 2 | Step 3 | 
+ | --- | --- | --- |
+| ![Step 1](./img/add_stage_1.png) | ![Step 2](./img/add_stage_2.png) | ![Step 3](./img/add_stage_3.png) |
+ | **Step 4** | **Step 5** | **Step 6** | 
+| ![Step 4](./img/add_stage_4.png) | ![Step 5](./img/add_stage_5.gif) | ![Step 6](./img/add_stage_6.png) |
+ | **Step 7** | **Step 8** | **Step 9** | 
+| ![Step 7](./img/add_stage_7.png) | ![Step 8](./img/add_stage_8.png) | ![Step 9](./img/add_stage_9.png) |
+ | **Step 10** | **Step 11** | **Step 12** | 
+| ![Step 10](./img/add_stage_10.png) | ![Step 11](./img/add_stage_11.png) | ![Step 12](./img/add_stage_12.png) |
+ | **Step 13** | **Step 14** | | 
+| ![Step 13](./img/add_stage_13.png) | ![Step 14](./img/add_stage_14.png) | |
 
 #### Summary
 You have learned 3 techniques for supplying application configuration from within an Azure DevOps Release Pipeline. You used pipeline variables, variable groups and a KeyVault task. All three rely on the JSON variable substitution setting of the Deploy task to replace values in the chosen json file with variables obtained from the pipeline.
