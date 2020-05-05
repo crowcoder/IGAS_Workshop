@@ -106,30 +106,59 @@ Let's enable slots for our application and tweak some configuration.
 1. Open the Deployment Slots blade of your Azure App Service in the Azure portal and click "Add Slot".
 1. Give it a name, "Staging" being a good choice. **Be sure to clone settings from the existing App Service**. Click "Add", and then "Close".
 1. Click your new slot to see its Overview.
-1. Note its URL is different than your "production" app service. However, there is no application there yet. Creating a slot does not carry over any deployed application. 
+1. Note its URL is different than your "production" app service. However, there is no application there yet. Creating a slot does not carry over any deployed application so we must do a deployment to the slot before we can use the staging environment.
 1. Now navigate over to DevOps and begin editing the Release pipeline's PROD stage. Select the "Deploy Azure App Service" task. Edit this task to deploy to the slot we just created. Your Resource Group and Slot selections should be available in the drop down lists. Be sure to Save your changes.
 1. Now create a Release and Deploy both the DEV and PROD stages.
 1. Make a GET request to the staging URL and observe that the deployment succeeded.
 1. Make a GET request to the production URL and observe it is still online.
-
-// fix this!
 
  | Step 1 | Step 2 | Step 3 | 
  | --- | --- | --- |
 | ![Step 1](./img/slot_1.png) | ![Step 2](./img/slot_2.png) | ![Step 3](./img/slot_3.png) |
  | **Step 4** | **Step 5** | **Step 6** | 
 | ![Step 4](./img/slot_4.png) | ![Step 5](./img/slot_5.png) | ![Step 6](./img/slot_6.png) |
- | **Step 7** | **Step 8** | **Step 9** | 
-| ![Step 7](./img/slot_7.png) | ![Step 8](./img/slot_8.png) | ![Step 9](./img/slot_9.png) |
- | **Step 10** | **Step 11** | **Step 12** | 
-| ![Step 10](./img/slot_10.png) | ![Step 11](./img/slot_11.png) | ![Step 12](./img/slot_12.png) |
- | **Step 13** | **Step 14** | **Step 15** | 
-| ![Step 13](./img/slot_13.png) | ![Step 14](./img/slot_14.png) | ![Step 15](./img/slot_15.png) |
- | **Step 16** | **Step 17** | | 
-| ![Step 16](./img/slot_16.png) | ![Step 17](./img/slot_17.png) |  |
+ | **Step 7** | **Step 8** | | 
+| ![Step 7](./img/slot_7.png) | ![Step 8](./img/slot_8.png) | |
 
 Now we have two active slots. In a testing scenario, you can direct your testers to the staging slot without affecting production operations (with the caveat that resources such as databases, etc., might still be the same depending on your needs).
 
-Let's explore configuration settings and how they behave in slot deployments. We will use the MaxTTL configuration setting to observe it either changing or not changing between the slots, depending on how it is defined.
+Let's explore configuration settings and how they behave in slot deployments. We will use the `MaxTTL` configuration setting to observe it either changing or not changing between the slots, depending on how it is defined.
+> OBJECTIVE: Observe how *non-slot* move along with the application during a swap.
+1. Access the Configuration blade of the production slot. Click on `IGAS_MaxTTL` to open its properties.
+1. Make note of its value and that it is NOT designated a "Deployment slot setting". Click OK or Cancel to exit without changes.
+1. Now look at the staging slot configuration. Open the "Deployment slots" blade and click on the staging slot link.
+1. Open the staging slot's Configuration blade. Open the `IGAS_MaxTTL` setting.
+1. Change its value to something other than 30.
+1. Save.
+1. Make a request to the staging URL. Note its value is what you just changed it to in the Azure portal.
+1. Make a request to the production URL. Note its value has not changed.
+1. Now lets swap slots. We should see the values swap because the setting was not designated a Deployment slot setting. The values are part of the application and they move with the application. Go to the Overview blade of either the staging or production slot and click "Swap".
+1. Make note of the Old and New values for the target slots, then click "Swap".
+1. After a few moments you should receive a success message. Click "Close".
+1. Make a request to the staging slot and note the `MaxTTL` setting is back to 30.
+1. Make a request to the production slot and note the `MaxTTL` setting is also changed.
 
-1. Access the Configuration blade of the production slot and
+ | Step 1 | Step 2 | Step 3 | 
+ | --- | --- | --- |
+| ![Step 1](./img/swap_1.png) | ![Step 2](./img/swap_2.png) | ![Step 3](./img/swap_3.png) |
+ | **Step 4** | **Step 5** | **Step 6** | 
+| ![Step 4](./img/swap_4.png) | ![Step 5](./img/swap_5.png) | ![Step 6](./img/swap_6.png) |
+ | **Step 7** | **Step 8** | **Step 9** | 
+| ![Step 7](./img/swap_7.png) | ![Step 8](./img/swap_8.png) | ![Step 9](./img/swap_9.png) |
+ | **Step 10** | **Step 11** | **Step 12** | 
+| ![Step 10](./img/swap_10.png) | ![Step 11](./img/swap_11.png) | ![Step 12](./img/swap_12.png) |
+ | **Step 13** | | | 
+| ![Step 13](./img/swap_13.png) |||
+
+> OBJECTIVE: Observe how Deployment slot settings do not move along with a swap. The settings are effectively part of the slot, not the application.
+1. Open the Configuration blade of either the staging or production slot and click on the MaxTTL setting to open its properties.
+1. This time, check "Deployment slot setting". Click OK.
+1. Click Save, and then Continue to save the change and restart the App Service.
+1. Perform a GET request to both URLs. You should observe no changes yet. 
+1. Now, repeat steps 9 through 13 from the previous objective. Except this time, observe that the settings have not changed! The settings stuck to the slot itself, instead of traveling with the application.
+
+ | Step 1 | Step 2 | Step 3 | 
+ | --- | --- | --- |
+| ![Step 1](./img/swap2_1.png) | ![Step 2](./img/swap2_2.png) | ![Step 3](./img/swap2_3.png) |
+ | **Step 4** | | | 
+| ![Step 4](./img/swap2_4.png) | ||
