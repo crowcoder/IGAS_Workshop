@@ -115,15 +115,13 @@ To drive that point home let's demonstrate that concept and another. The other i
 
 To demonstrate, lets run the application and pass it a command line variable that has the same key as the value we added to appSettings.Development.json.
 
-Open a terminal to the root of the project and invoke the dotnet cli command to build and run the application, including a command line parameter by the same name as the one we already used, but with a different value so we can observe the behavior.
+Terminate the application if it is still running. Open a terminal to the root of the project and invoke the dotnet cli command to build and run the application, including a command line parameter by the same name as the one we already used, but with a different value so we can observe the behavior.
 
 `dotnet run --FromAppSettings "I'm actually from the command line argument"`
 
 Wait for it to start up and then invoke the GET request:
 
 Notice how the command line argument overrode the appSetting? That is because, in startup, `config.AddCommandLine(args);` is called after `config.AddJson(...`. 
-
-> Important:
 
 We have just learned how the configuration system injests settings from various sources and bundles them up in one "location". This is a very powerful techinque to use. It allows us to put configuration anywhere we want during development without needing to have the same configuration provider being used in production. For example, you can put a URL in a json file, but in production you can put it in an environment variable and your code does not have to change.
 
@@ -168,7 +166,7 @@ As a conscientious developer who is careful to keep configuration secrets out of
 ```
 
 ## Completing the API
-Lets pull in a value from each of the registered providers and wire up our application to respond with them. The only one we have left is Environment Variables. For this example, we'll just create one in the terminal but you can use any technique you'd like. Just remember that system level variables are read at the start of a process so you may need to restart your terminal or IDE after you create one.
+Lets pull in a value from each of the registered providers and wire up our application to respond with them. The only one we have left is Environment Variables.
  
 1. Choose any existing environment variable from your system. In a powershell terminal run `Set-Location ENV:`
 1. This will allow you to list the environment variables as if they were files in a folder. Now run `dir`
@@ -205,6 +203,6 @@ Lets pull in a value from each of the registered providers and wire up our appli
 
 Experiment with configuration by commenting out one or more of the providers that are added in `program.cs`. What happens when you do?
 
-Research and inject additional prodivers like the [Memory configuration provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#memory-configuration-provider), the [Key-per-file configuration provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#key-per-file-configuration-provider), the [Azure Keyvault configuration provider](https://docs.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?view=aspnetcore-3.1) and more.
+Research and inject additional providers like the [Memory configuration provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#memory-configuration-provider), the [Key-per-file configuration provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#key-per-file-configuration-provider), the [Azure Keyvault configuration provider](https://docs.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?view=aspnetcore-3.1) and more.
 
 Continue to [Exercise 2](./exercise_2.md)
