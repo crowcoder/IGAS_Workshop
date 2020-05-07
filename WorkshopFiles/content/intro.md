@@ -2,7 +2,7 @@
 
 # Welcome to this workshop on application configuration with .NET Core, Azure and Azure DevOps!
 
-### Keeping secrets out of source code has always been challenging. De-coupling sensitive information like connection strings, certificates and passwords from your development projects means you won't have accidental exposure. .Net Core now provides a rich configuration system that goes far beyond the legacy web.config appSettings. This is great for development and debugging, but how do we manage configuration when it is time to go to production? In this hands-on workshop we will first configure a local application to pull configuration from various sources and then we will move on to explore real world production deployment scenarios.
+### Keeping secrets out of source code has always been challenging. De-coupling sensitive information like connection strings, certificates and passwords from your development projects means you won't have accidental exposure. .Net Core now provides a rich configuration system that goes far beyond the legacy web.config appSettings. This is great for development and debugging, but how do we manage configuration when it is time to go to production? In this hands-on workshop we will first configure a local application to pull configuration from various sources and then we will move on to explore real world production deployment scenarios in Azure.
 
 This workshop will guide you through step-by-step exercises including:
 

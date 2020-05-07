@@ -123,7 +123,9 @@ Let's enable slots for our application and tweak some configuration.
 Now we have two active slots. In a testing scenario, you can direct your testers to the staging slot without affecting production operations (with the caveat that resources such as databases, etc., might still be the same depending on your needs).
 
 Let's explore configuration settings and how they behave in slot deployments. We will use the `MaxTTL` configuration setting to observe it either changing or not changing between the slots, depending on how it is defined.
-> OBJECTIVE: Observe how *non-slot* move along with the application during a swap.
+
+> OBJECTIVE: Observe how *non-slot* settings move along with the application during a swap.
+
 1. Access the Configuration blade of the production slot. Click on `IGAS_MaxTTL` to open its properties.
 1. Make note of its value and that it is NOT designated a "Deployment slot setting". Click OK or Cancel to exit without changes.
 1. Now look at the staging slot configuration. Open the "Deployment slots" blade and click on the staging slot link.
