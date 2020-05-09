@@ -1,4 +1,15 @@
-<link href="styles.css" rel="stylesheet"></link>
+
+<style>
+    .step {
+    background-color:rgba(96, 194, 235, 1);
+    padding:.2em;
+    font-size:1.5em;
+}
+
+img {
+    max-width:600px;
+}
+</style>
 
 # Exercise #2, Rub DevOps On It (30 min.)
 Now that you have completed development of the API, it is time to #RubDevOpsOnIt.
