@@ -1,16 +1,3 @@
-
-<style>
-    .step {
-    background-color:rgba(96, 194, 235, 1);
-    padding:.2em;
-    font-size:1.5em;
-}
-
-img {
-    max-width:600px;
-}
-</style>
-
 # Exercise #2, Rub DevOps On It (30 min.)
 Now that you have completed development of the API, it is time to #RubDevOpsOnIt.
 Make sure you have completed the prerequisites so you have an Azure DevOps organization ready to go, log into your DevOps account, then:
@@ -24,7 +11,7 @@ Create project
 
 ![Step 1](./img/project_setup_1.png)
 
-<div class="step">Step 2</div>
+<div style="background-color:rgba(96, 194, 235, 1);padding:.2em;font-size:1.5em;">Step 2</div>
 
 Once the project has been created, choose "Repos" to get your source code into Azure Git.
 
