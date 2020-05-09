@@ -1,22 +1,43 @@
+<link href="styles.css" rel="stylesheet"></link>
+
 # Exercise #2, Rub DevOps On It (30 min.)
 Now that you have completed development of the API, it is time to #RubDevOpsOnIt.
 Make sure you have completed the prerequisites so you have an Azure DevOps organization ready to go, log into your DevOps account, then:
 
-1. Create project
-    * Name the project whatever you want.
-    * Choose between public and private. It may be easier to receive assistance if you make it public. 
-    * Click "Create project" to generate a project backed by a Git repository.
-1. Once the project has been created, choose "Repos" to get your source code into Azure Git.
-1. Choose "Import a repository option".
-1. For the clone URL, enter https://github.com/crowcoder/IGAS_Prod.git
-    > IMPORTANT: this is not the same repository that you cloned and worked with in exercise 1!
-1. When the import is complete you will see your new repository. This repo is a copy of the GitHub repo, the two are not linked. Changes to one will not affect changes to the other.
+<div class="step">Step 1</div>
 
- | Step 1 | Step 2 | Step 3 | 
- | --- | --- | --- |
- | ![Step 1](./img/project_setup_1.png) | ![Step 2](./img/project_setup_2.png) | ![Step 3](./img/project_setup_3.png) |
- | **Step 4** | **Step 5** | | 
- | ![Step 4](./img/project_setup_4.png) | ![Step 5](./img/project_setup_5.png) | |
+Create project
+ * Name the project "IGAS" or whatever you like.
+ * Choose between public and private. It may be easier to receive assistance if you make it public. 
+ * Click "Create project" to generate a project backed by a Git repository.
+
+![Step 1](./img/project_setup_1.png)
+
+<div class="step">Step 2</div>
+
+Once the project has been created, choose "Repos" to get your source code into Azure Git.
+
+![Step 2](./img/project_setup_2.png)
+
+<div class="step">Step 3</div>
+
+Choose "Import a repository option".
+
+![Step 3](./img/project_setup_3.png)
+
+<div class="step">Step 4</div>
+
+For the clone URL, enter https://github.com/crowcoder/IGAS_Prod.git
+
+> IMPORTANT: this is not the same repository that you cloned and worked with in exercise 1!
+
+![Step 4](./img/project_setup_4.png)
+
+<div class="step">Step 5</div>
+
+When the import is complete you will see your new repository. This repo is a copy of the GitHub repo, the two are not linked. Changes to one will not affect changes to the other.
+
+![Step 5](./img/project_setup_5.png)
 
 ## Prod branch differences
  In just a moment you will create a Build of the project in Azure DevOps. But first, let's go over what I have changed between what you have done so far on the local master branch and the new repository's Prod branch which we will be working with from here on out. 
@@ -64,21 +85,47 @@ The appsettings file has been modified to include a few fictitious settings. The
  We don't have a lot of work to do in the Build pipeline. There are no configuration steps included here (though you could), we just need to have a published project to deploy in the Release pipeline. It is in the Release Pipeline that we will manage most configuration. In exercise 5 we will revisit this build when we work with Secure Files.
  > [More information on Build pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/dotnet-core?view=azure-devops#package-and-deliver-your-code)
 
-1. Click on the Rocket Ship icon to open Pipelines and then click "Create Pipeline"
-1. Choose Azure Repos Git YAML
-1. Select the IGAS Git code repository
-1. (this step may not be necessary, your .yml file may be chosen automatically) Select Existing Azure Pipelines YAML file. 
-1. (this step may not be necessary, your .yml file may be chosen automatically) Select azure-pipelines.yml. 
-1. Click run to build the project and produce an artifact that will be deployed later in a Release pipeline.
-1. After a few moments, review the successful deployment.
+<div class="step">Step 1</div>
 
-  | Step 1 | Step 2 | Step 3 | 
- | --- | --- | --- |
- | ![Step 1](./img/build_1.png) | ![Step 2](./img/build_2.png) | ![Step 3](./img/build_3.png) |
- | **Step 4** | **Step 5** | **Step 6**| 
- | ![Step 4](./img/build_4.png) | ![Step 5](./img/build_5.png) | ![Step 6](./img/build_6.png) |
-  | **Step 7** |  | | 
- | ![Step 4](./img/build_7.png) | | |
+Click on the Rocket Ship icon to open Pipelines and then click "Create Pipeline"
+
+![Step 1](./img/build_1.png)
+
+<div class="step">Step 2</div>
+
+Choose Azure Repos Git YAML
+
+![Step 2](./img/build_2.png)
+
+<div class="step">Step 3</div>
+
+Select the IGAS Git code repository
+
+![Step 3](./img/build_3.png)
+
+<div class="step">Step 4</div>
+
+(this step may not be necessary, your .yml file may be chosen automatically) Select Existing Azure Pipelines YAML file. 
+
+![Step 4](./img/build_4.png)
+
+<div class="step">Step 5</div>
+
+(this step may not be necessary, your .yml file may be chosen automatically) Select azure-pipelines.yml. 
+
+![Step 5](./img/build_5.png)
+
+<div class="step">Step 6</div>
+
+Click run to build the project and produce an artifact that will be deployed later in a Release pipeline.
+
+![Step 6](./img/build_6.png)
+
+<div class="step">Step 7</div>
+
+After a few moments, review the successful deployment.
+
+![Step 7](./img/build_7.png)
 
   ## Create a Release
   A "Release" is the process that deploys your application. It will pick up the artifact created by the Build pipeline and push it to an Azure App Service. Here we also have an opportunity to further configure the application by replacing setting values based on the environment or "stage". For instance, a Release pipeline may have, for example, 3 stages. Development, QA and Production. At each stage we can swap out values that are specific to that stage.
@@ -93,7 +140,9 @@ The appsettings file has been modified to include a few fictitious settings. The
 > [workshop.ps1 in the scripts folder has all the commands you will see here, in an easier to execute format](../scripts/workshop.ps1)
 
 You will execute the following Powershell commands to create a Resource Group, an Azure App Service Plan, and a Web App.
-1. Connect to your Azure subscription. Run the following Powershell command and do the login dance. If you keep your Powershell terminal open throughout the workshop you should not need to log in again.
+<div class="step">Step 1</div>
+Connect to your Azure subscription. Run the following Powershell command and do the login dance. If you keep your Powershell terminal open throughout the workshop you should not need to log in again.
+
     ```PowerShell
     Connect-AzAccount
     ````
@@ -103,51 +152,58 @@ You will execute the following Powershell commands to create a Resource Group, a
     -------                 ----------------                   --------                             -----------
     tekhed_2000@hotmail.com Visual Studio Enterprise: BizSpark xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx AzureCloud
     ````
-1. [**Optional**] If your default subscription is not the one you want to use for this workshop, then you will need to set it manually. Use the following command to acquire the subscription id you want to use:
-    ````Powershell
-    Get-AzSubscription
-    ````
-    Output (will vary):
-    ````
-    Name                    Id               TenantId
-    ----                    --               --------
-    Visual Studio E...     xxxxxxxx-xxxx...  xxxxxxxx-xxxx-...
-    Windows Azure M...     xxxxxxxx-xxxx-... xxxxxxxx-xxxx-...
-    ````
+<div class="step">Step 2</div>
+[**Optional**] If your default subscription is not the one you want to use for this workshop, then you will need to set it manually. Use the following command to acquire the subscription id you want to use:
 
-1. [**Optional**] If you need to change your active session's connected subscription, run this command to set it. Use the `Id` value from the subscription you chose to use from step 2.
-    ````Powershell
-    Set-AzContext -SubscriptionId "xxxxxxxx-xxxx..."
-    ````
-    Output:
-    ````
-    Name              Account              SubscriptionName           Environment            TenantId
-    ----              -------              ----------------           -----------            --------
-    Visual S...       tekhed_2000@...    Visual Studio E...           AzureCloud             xxxxxxxx-xxxx-...
-    ````
-1. The following commands create a Resource Group to contain all of the workshop-related resources, an App Service Plan which is the actual infrastructure that can run an application, then finally the App Service, with a random name. The random name is to ensure uniqueness across Azure since it is part of the public URL. It will likely take a few moments for all of the commands to complete.
-    ````PowerShell
-    # Create resource group to hold all resources for the tutorial.
-    # Change the region as appropriate for your location
-    $groupName = "rg-igas-01"
-    $location = "eastus"
-    New-AzResourceGroup -Name $groupName -Location $location
+   ````Powershell
+   Get-AzSubscription
+   ````
+   Output (will vary):
+   ````
+   Name                    Id               TenantId
+   ----                    --               --------
+   Visual Studio E...     xxxxxxxx-xxxx...  xxxxxxxx-xxxx-...
+   Windows Azure M...     xxxxxxxx-xxxx-... xxxxxxxx-xxxx-...
+   ````
 
-    # Create an app service plan
-    $plan = New-AzAppServicePlan -Location $location  -Name "asp-igas-01" -ResourceGroupName $groupName -Tier "S1"
+<div class="step">Step 3</div>
+[**Optional**] 
+If you need to change your active session's connected subscription, run this command to set it. Use the Id value from the subscription you chose to use from step 2.
 
-    # Create the App Service to host the application
-    # The name has to be unique across all of Azure because it is part of the public URL.
-    # This generates a random name.
-    $prefix = [System.IO.Path]::GetFileNameWithoutExtension([System.IO.Path]::GetRandomFileName())
-    Write-Debug $prefix
-    $app = New-AzWebApp -ResourceGroupName $groupName -Name "$prefix-igas-01" -Location $location -AppServicePlan $plan.Id
+   ````Powershell
+   Set-AzContext -SubscriptionId "xxxxxxxx-xxxx..."
+   ````
+   Output:
+   ````
+   Name              Account              SubscriptionName           Environment            TenantId
+   ----              -------              ----------------           -----------            --------
+   Visual S...       tekhed_2000@...    Visual Studio E...           AzureCloud             xxxxxxxx-xxxx-...
+   ````
+<div class="step">Step 4</div>
+The following commands create a Resource Group to contain all of the workshop-related resources, an App Service Plan which is the actual infrastructure that can run an application, then finally the App Service, with a random name. The random name is to ensure uniqueness across Azure since it is part of the public URL. It will likely take a few moments for all of the commands to complete.
 
-    # Browse to the URL of the new application to make sure the app service is up.
-    $newurl = "https://$prefix-igas-01.azurewebsites.net"
-    [System.Diagnostics.Process]::Start($newurl)
+   ````PowerShell
+   # Create resource group to hold all resources for the tutorial.
+   # Change the region as appropriate for your location
+   $groupName = "rg-igas-01"
+   $location = "eastus"
+   New-AzResourceGroup -Name $groupName -Location $location
 
-    ````
+   # Create an app service plan
+   $plan = New-AzAppServicePlan -Location $location  -Name "asp-igas-01" -ResourceGroupName $groupName -Tier "S1"
+   
+   # Create the App Service to host the application
+   # The name has to be unique across all of Azure because it is part of the public URL.
+   # This generates a random name.
+   $prefix = [System.IO.Path]::GetFileNameWithoutExtension([System.IO.Path]::GetRandomFileName())
+   Write-Debug $prefix
+   $app = New-AzWebApp -ResourceGroupName $groupName -Name "$prefix-igas-01" -Location $location -AppServicePlan $plan.Id
+   
+   # Browse to the URL of the new application to make sure the app service is up.
+   $newurl = "https://$prefix-igas-01.azurewebsites.net"
+   [System.Diagnostics.Process]::Start($newurl)
+   ````
+
 > Feel free to check out the App Service in Azure. It should look something like this:
 
 ![New App Service](./img/appsvc-1.png)
@@ -155,31 +211,94 @@ You will execute the following Powershell commands to create a Resource Group, a
 #### Create a Release Pipeline
 Now that you have a place to deploy your application, it is time to create a Release Pipeline to push the application up to azure.
 
-1. In DevOps, hover over the rocket and select Releases. If you have not run any releases yet click on "New Pipeline". If you have run any other releases then click [the +New button and select "New Release Pipeline"](./img/new_release_pipeline.png).
-1. On the Select a Template screen, Apply the Azure App Service deployment template. This template is pre-configured for deploying to an Azure App Service. 
-1. Next, Add an Artifact. An Artifact is the set of files that will be deployed. It is generated by the Build pipeline from [Setup a Build](#setupabuild). The files are stored for us in the Azure cloud. Rename the Stage to "DEV". We will be adding another stage in this workshop named "PROD".
-1. Fill out the "Add an artifact" form. Select the workshop project which is named "IGAS" if you chose the suggested project name. The Source (build pipeline) should have the Build we created available in the drop down list. It will also be named "IGAS". In Default Version, choose "Latest" to instruct the release pipeline to always grab the most recent build artifact. Leave Source Alias at its default value and click "Add".
-1. click "1 job, 1 task" to open the editor for the tasks in this stage of the release.
-1. Choose your Azure Subscription and click Authorize.
-1. Once the pipeline is authorized, you can choose the App Service from the drop down list.
-1. Save
-1. The save dialog is asking you to create or choose a folder to save the pipeline in. For simplicity you can just accept the default root folder. 
-1. Rename the Release from "New release pipeline" to "IGAS".
-1. Now that the pipeline is fully defined you can "Create a Release". 
-1. Now, execute a release. Click "Create".
-1. Click "Release-1" to go to the release instance you just created. As you create future releases they will become Release-2, Release-3, etc.
-1. The default release properties have it set to deploy automatically so you should see that it is running. You can configure it to only deploy manually if you prefer.
-1. When it is done you should see a Succeeded confirmation.
-1. Test the application to ensure it works. Make a GET request to the URL of your app service. Other than the random host name that was generated by Powershell, it will be like this: https://aqixjv2y-igas-01.azurewebsites.net/Configuration/all . I have chosen to use Postman as my HTTP client. Notice there is not much configuration detail returned. Let's change that in [exercise 3](exercise_3.md).
+<div class="step">Step 1</div>
 
-  | Step 1 | Step 2 | Step 3 | 
- | --- | --- | --- |
- | ![Step 1](./img/release_1.png) | ![Step 2](./img/release_2.png) | ![Step 3](./img/release_3.png) |
- | **Step 4** | **Step 5** | **Step 6**| 
- | ![Step 4](./img/release_4.png) | ![Step 5](./img/release_5.png) | ![Step 6](./img/release_6.png) |
-  | **Step 7** | **Step 8** | **Step 9** | 
- | ![Step 7](./img/release_7.png) | ![Step 8](./img/release_8.png) | ![Step 9](./img/release_9.png) |
- | **Step 10** | **Step 11** | **Step 12** | 
- | ![Step 10](./img/release_10.png) | ![Step 11](./img/release_11.png) | ![Step 12](./img/release_12.png) |
- | **Step 13** | **Step 14** | **Step 15**  | 
- | ![Step 13](./img/release_13.png) | ![Step 14](./img/release_14.png) | ![Step 14](./img/GetAll_AfterFirstDeploy.png) |
+In DevOps, hover over the rocket and select Releases. If you have not run any releases yet click on "New Pipeline". If you have run any other releases then click [the +New button and select "New Release Pipeline"](./img/new_release_pipeline.png).
+
+![Step 1](./img/release_1.png)
+
+<div class="step">Step 2</div>
+
+On the Select a Template screen, Apply the Azure App Service deployment template. This template is pre-configured for deploying to an Azure App Service. 
+
+![Step 2](./img/release_2.png)
+
+<div class="step">Step 3</div>
+
+While on this screen, rename the stage to "DEV". Next, Add an Artifact. An Artifact is the set of files that will be deployed. It is generated by the Build pipeline from [Setup a Build](#setupabuild). The files are stored for us in the Azure cloud. 
+
+![Step 3](./img/release_3.png)
+
+<div class="step">Step 4</div>
+
+Fill out the "Add an artifact" form. Select the workshop project which is named "IGAS" if you chose the suggested project name. The Source (build pipeline) should have the Build we created available in the drop down list. It will also be named "IGAS". In Default Version, choose "Latest" to instruct the release pipeline to always grab the most recent build artifact. Leave Source Alias at its default value and click "Add".
+
+![Step 4](./img/release_4.png)
+
+<div class="step">Step 5</div>
+
+click "1 job, 1 task" to open the editor for the tasks in this stage of the release.
+
+![Step 5](./img/release_5.png)
+
+<div class="step">Step 6</div>
+
+Choose your Azure Subscription and click Authorize. This may take a few moments.
+
+![Step 6](./img/release_6.png)
+
+<div class="step">Step 7</div>
+
+Once the pipeline is authorized, the App Service you created with Powershell will be available in the drop down list. You may need to click the refresh button beside the dropdown.
+
+![Step 7](./img/release_7.png)
+
+<div class="step">Step 8</div>
+
+Save
+
+![Step 8](./img/release_8.png)
+
+<div class="step">Step 9</div>
+
+The save dialog is asking you to create or choose a folder to save the pipeline in. For simplicity you can just accept the default root folder.
+
+![Step 9](./img/release_9.png)
+
+<div class="step">Step 10</div>
+
+Create a Release.
+
+![Step 10](./img/release_10.png)
+
+<div class="step">Step 11</div>
+
+Leave all the defaults. Click "Create".
+
+![Step 11](./img/release_11.png)
+
+<div class="step">Step 12</div>
+
+A Release is now in process. Click the link "Release-1" to watch it execute. As you create future releases they will become Release-2, Release-3, etc.
+
+![Step 12](./img/release_12.png)
+
+<div class="step">Step 13</div>
+
+The default release properties have it set to deploy automatically so you should see that it is running. You can configure it to only deploy manually if you prefer.
+
+![Step 13](./img/release_13.png)
+
+<div class="step">Step 14</div>
+
+When it is done you should see a Succeeded confirmation.
+
+![Step 14](./img/release_14.png)
+
+<div class="step">Step 15</div>
+
+Test the application to ensure it works. Make a GET request to the URL of your app service. Other than the random host name that was generated by Powershell, it will be like this: https://aqixjv2y-igas-01.azurewebsites.net/Configuration/all . I have chosen to use Postman as my HTTP client. Notice there is not much configuration detail returned. Let's change that in [exercise 3](exercise_3.md).
+
+ ![Step 14](./img/GetAll_AfterFirstDeploy.png) |
+
+ Continue to [Exercise 3](./exercise_3.md)
