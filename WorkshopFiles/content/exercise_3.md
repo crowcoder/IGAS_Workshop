@@ -1,4 +1,4 @@
-# Exercise 3 - Configuration in Azure DevOps Release Pipelines
+# Exercise 3 - Configuration in Azure DevOps Release Pipelines (40 min)
 
 Very often we have multiple environments that our applications need to be deployed to. In this workshop we will have two - "DEV" and "Production". For simplicity we have left out other, traditional environments like QA and UAT, but the following concepts apply exactly the same.
 
