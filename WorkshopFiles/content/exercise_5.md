@@ -114,7 +114,7 @@ Open the zip file and notice the secure file is part of the package.
 
 ![Step 15](./img/steps/step15.png)
 
-Finally, make a request to your API and observe the settings from the secure file are displaying.
+Now that there is an updated artifact, create a Release and what for it to succeed (steps omitted). Finally, make a request to your API and observe the settings from the secure file are displaying.
 
 ![Step 15](./img/secure_file_15.png)
 
