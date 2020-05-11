@@ -84,7 +84,7 @@ Choose to commit the change directly to the prod branch and Save.
 
 ![Step 10](./img/steps/step10.png)
 
-Create a new release and deploy it. A build will begin automatically.
+Run the Build pipeline.
 
 ![Step 10](./img/secure_file_10.png)
 
