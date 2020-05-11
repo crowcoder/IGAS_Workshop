@@ -57,7 +57,7 @@ Slide the toggle to Authorize for use in all Pipelines. The mores secure option 
 
 ![Step 7](./img/steps/step7.png)
 
-Begin an edit on the IGAS pipeline.
+Begin an edit on the IGAS **Build** pipeline (not the release pipeline).
 
 ![Step 7](./img/secure_file_7.png)
 
