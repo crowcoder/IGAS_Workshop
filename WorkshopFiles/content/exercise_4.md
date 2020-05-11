@@ -1,4 +1,4 @@
-# Exercise 4 - Configuration in the Azure Portal (30 min.)
+# Exercise 4 - Configuration in the Azure Portal (50 min.)
 
 At this point you have seen a variety of ways to configure settings in code and in Azure DevOps. It is time to turn our attention to Application settings in the Azure Portal.
 
