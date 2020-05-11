@@ -15,7 +15,7 @@ We need to add two steps to the Build pipeline. First it will download the secur
 
 ![Step 1](./img/steps/step1.png)
 
-With any text editor, create a json file with a few settings. Paste the following if you like:
+With any text editor, create a json file named `prod_appsettings.json` with a few settings. Paste the following if you like:
     
 ````json
 {
