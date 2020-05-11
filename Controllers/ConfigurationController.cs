@@ -16,13 +16,20 @@ namespace IGAS.Controllers
         {
             _config = config;
         }
-
         [HttpGet]
         public IEnumerable<string> Get()
         {
-          return new string[] {
-           $"Testing, Hello World!"
-          };
+            // replace from here...
+            string envVar = _config.GetValue<string>("TMP") ?? "NOT SET";
+            string userSecret = _config.GetValue<string>("MyUserSecret") ?? "NOT SET";
+            string appSetting = _config.GetValue<string>("FromAppSettings") ?? "NOT SET";
+
+            return new string[] {
+        $"Environment Variable TMP = {envVar}",
+        $"User Secret MyUserSecret = {userSecret}",
+        $"App Setting FromAppSettings = {appSetting}"
+    };
+            // .. to here
         }
     }
 }
