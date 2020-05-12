@@ -141,7 +141,7 @@ You will execute the following Powershell commands to create a Resource Group, a
 <div class="step">Step 1</div>
 Connect to your Azure subscription. Run the following Powershell command and do the login dance. If you keep your Powershell terminal open throughout the workshop you should not need to log in again.
 
-    ```PowerShell
+    ````PowerShell
     Connect-AzAccount
     ````
     Output:
